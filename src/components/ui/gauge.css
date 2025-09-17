@@ -1,0 +1,24 @@
+.gauge {
+  --size: 200px;
+  --cutout: 50%;
+  --color: lime;
+  --background: white;
+  --value: 0.1;
+
+  width: var(--size);
+  height: var(--size);
+  border-radius: calc(var(--size) / 2);
+  background: radial-gradient(
+      var(--background) 0 var(--cutout),
+      transparent var(--cutout) 100%
+    ),
+    conic-gradient(
+      from -135deg,
+      var(--color) calc(270deg * var(--value)),
+      gray calc(270deg * var(--value)) 270deg,
+      transparent 270deg
+    );
+  text-align: center;
+  font-size: 28pt;
+  line-height: var(--size);
+}

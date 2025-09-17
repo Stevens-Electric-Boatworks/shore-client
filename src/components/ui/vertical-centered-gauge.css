@@ -1,0 +1,23 @@
+.base {
+  --size: 200px;
+  --value: 0;
+  --color: lime;
+
+  position: relative;
+  width: 20px;
+  height: var(--size);
+  background-color: var(--color);
+  border-bottom: calc(var(--size) / 2 * clamp(0, 1, calc(1 + var(--value))))
+    solid gray;
+  border-top: calc(var(--size) / 2 * clamp(0, 1, calc(1 - var(--value)))) solid
+    gray;
+}
+
+.label {
+  position: absolute;
+  left: 25px;
+  top: calc(
+    50% - var(--value) * 50%
+  ); /* Dynamically position based on --value */
+  transform: translateY(-50%); /* Center vertically */
+}
