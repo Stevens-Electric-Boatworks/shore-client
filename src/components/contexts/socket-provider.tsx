@@ -35,9 +35,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     let reconnectTimeout: NodeJS.Timeout | null = null;
 
     const connect = () => {
-      // ws = new WebSocket("wss://eboat.thiagoja.com/api");
-      // ws = new WebSocket("ws://localhost:5001");
-      ws = new WebSocket("ws://192.168.1.144:5001");
+      if (!process.env.NEXT_PUBLIC_SOCKET_URL)
+        throw new Error("WebSocket URL is not set!");
+      ws = new WebSocket(process.env.NEXT_PUBLIC_SOCKET_URL);
 
       ws.onopen = () => {
         console.log("WebSocket connected");
