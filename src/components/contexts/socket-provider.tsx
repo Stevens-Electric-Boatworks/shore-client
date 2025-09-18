@@ -35,6 +35,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     let reconnectTimeout: NodeJS.Timeout | null = null;
 
     const connect = () => {
+      console.log(process.env.NEXT_PUBLIC_SOCKET_URL);
       if (!process.env.NEXT_PUBLIC_SOCKET_URL)
         throw new Error("WebSocket URL is not set!");
       ws = new WebSocket(process.env.NEXT_PUBLIC_SOCKET_URL);
