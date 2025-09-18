@@ -41,6 +41,26 @@ export default function DiagPage() {
       <div className="p-2 border bg-white w-[1000px]">
         <LatencyChart maxDataPoints={30} showStats={true} height={400} />
       </div>
+
+      <div className="border bg-white p-2">
+        <p className="font-bold uppercase">Build Information</p>
+        <table className="w-[400px]">
+          <tbody>
+            <tr>
+              <td>Built At</td>
+              <td className="text-end">
+                {process.env.NEXT_PUBLIC_BUILD_TIME || "dev"}
+              </td>
+            </tr>
+            <tr>
+              <td>Commit ID</td>
+              <td className="text-end">
+                {process.env.NEXT_PUBLIC_COMMIT_SHA || "dev"}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
