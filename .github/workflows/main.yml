@@ -44,3 +44,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_SOCKET_URL=${{ env.NEXT_PUBLIC_SOCKET_URL }}
+            NEXT_PUBLIC_BUILD_TIME=${{ env.NEXT_PUBLIC_BUILD_TIME }}
+            NEXT_PUBLIC_COMMIT_SHA=${{ env.NEXT_PUBLIC_COMMIT_SHA }}
