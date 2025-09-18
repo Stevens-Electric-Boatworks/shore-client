@@ -7,7 +7,7 @@ type SocketContextType = {
   isConnecting: boolean;
   isFailed: boolean;
   sendMessage: (message: string) => void;
-  latency?: number;
+  latency?: { value: number; timestamp: Date };
 };
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
@@ -23,7 +23,9 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [latency, setLatency] = useState<number | undefined>(undefined);
+  const [latency, setLatency] = useState<
+    { value: number; timestamp: Date } | undefined
+  >(undefined);
   const [isConnecting, setIsConnecting] = useState(true);
   const [isFailed, setIsFailed] = useState(false);
 
@@ -33,7 +35,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     let reconnectTimeout: NodeJS.Timeout | null = null;
 
     const connect = () => {
-      ws = new WebSocket("wss://eboat.thiagoja.com/api");
+      // ws = new WebSocket("wss://eboat.thiagoja.com/api");
+      // ws = new WebSocket("ws://localhost:5001");
+      ws = new WebSocket("ws://192.168.1.144:5001");
 
       ws.onopen = () => {
         console.log("WebSocket connected");
@@ -79,7 +83,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
           if (parsed.type === "pong" && parsed.timestamp) {
             const startTime = parseInt(parsed.timestamp);
             const delta = Date.now() - startTime;
-            setLatency(delta);
+            setLatency({
+              value: delta,
+              timestamp: new Date(),
+            });
             return;
           }
         } catch (err) {}
