@@ -3,6 +3,9 @@
 export const HeadingIndicator = ({ value }: { value?: number }) => {
   return (
     <div className="w-[200px] h-[200px]  relative overflow-hidden">
+      <p className="absolute inset-0 flex items-center justify-center text-white text-xl z-10 top-[80px]">
+        {value !== undefined ? `${value}°` : "—"}
+      </p>
       <img
         src="/compass.png"
         alt="Compass"

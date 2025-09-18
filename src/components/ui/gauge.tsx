@@ -4,6 +4,7 @@ import "./gauge.css";
 
 export const Gauge = ({
   value,
+  size = 200,
   low = 0,
   high = 100,
   danger,
@@ -11,6 +12,7 @@ export const Gauge = ({
   suffix,
 }: {
   value?: number;
+  size?: number;
   low?: number;
   high?: number;
   danger?: number;
@@ -18,11 +20,19 @@ export const Gauge = ({
   suffix?: string;
 }) => {
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "inline-block",
+        width: size,
+        height: size,
+      }}
+    >
       <div
         className="gauge"
         style={
           {
+            "--size": `${size}px`,
             "--value": Math.max(
               0,
               Math.min(1, (value || 0 - low) / (high - low))
@@ -39,7 +49,15 @@ export const Gauge = ({
         {value?.toFixed()}
         {suffix}
       </div>
-      <p className="absolute -translate-y-[50px] w-[200px] text-center">
+      <p
+        className={`absolute text-center`}
+        style={{
+          width: `${size}px`,
+          bottom: size <= 100 ? 10 : 20,
+          fontWeight: size <= 100 ? "bold" : "normal",
+          fontSize: size <= 100 ? 12 : 16,
+        }}
+      >
         {label}
       </p>
       {value === undefined && (
@@ -49,8 +67,8 @@ export const Gauge = ({
             top: 0,
             left: 0,
             pointerEvents: "none",
-            width: "100%",
-            height: "100%",
+            width: `${size}px`,
+            height: `${size}px`,
           }}
           viewBox="0 0 100 100"
         >

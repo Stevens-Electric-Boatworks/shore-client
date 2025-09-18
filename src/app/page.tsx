@@ -44,45 +44,16 @@ export default function Home() {
   // }, []);
 
   return (
-    <div>
+    <div className="flex gap-2 p-2">
       <title>MAIN</title>
-      <div className="flex gap-2 border bg-white">
-        <Gauge value={data.throttle} label="THR %" suffix="%" />
-        <Gauge value={data.speed} label="SPEED" high={50} suffix=" kt" />
-
+      <div className="flex px-2 gap-2 border bg-white">
+        <Gauge value={data.speed} label="SPEED" suffix="kts" />
         <HeadingIndicator value={data.heading} />
-
-        <VerticalCenteredGauge value={data.imu_x} high={1} low={0} />
-
-        <div>
-          <p>PITCH</p>
-        </div>
       </div>
-      <div className="flex gap-2 border bg-white">
-        <Gauge
-          value={data.bat_comp_temp}
-          label="TEMP °C"
-          low={0}
-          danger={270}
-          high={100}
-          suffix="°"
-        />
-        <Gauge
-          value={data.vbat}
-          label="VOLTAGE"
-          low={280}
-          danger={380}
-          high={400}
-          suffix="V"
-        />
-        <Gauge
-          value={data.current_bat}
-          label="CURRENT"
-          low={100}
-          danger={270}
-          high={300}
-          suffix="A"
-        />
+      <div className="flex flex-col px-2 gap-2 border bg-white">
+        <Gauge value={data.vbat} label="VBAT" size={100} />
+        <Gauge value={data.current_bat} label="BAT AMPS " size={100} />
+        <Gauge value={data.temp_bat} label="TEMP BAT" size={100} />
       </div>
     </div>
   );
