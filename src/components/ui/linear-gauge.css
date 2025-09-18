@@ -1,0 +1,54 @@
+.base {
+  --value: 0;
+  --color: lime;
+  --thickness: 20px;
+
+  position: relative;
+
+  background-color: gray;
+}
+
+.vertical {
+  width: var(--thickness);
+  height: 100%;
+
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+}
+
+.horizontal {
+  width: 100%;
+  height: var(--thickness);
+}
+
+.horizontal > .inner {
+  /* width: calc(var(--value) * 1%); */
+  height: 100%;
+
+  background-color: var(--color);
+}
+
+.vertical > .inner {
+  width: 100%;
+
+  background-color: var(--color);
+}
+
+.vertical > .inner.centered {
+  position: relative;
+}
+
+.horizontal > .inner.centered {
+  position: relative;
+  left: 50%;
+}
+
+.label {
+  position: absolute;
+  left: 25px;
+  top: calc(
+    50% - var(--value) * 50%
+  ); /* Dynamically position based on --value */
+  transform: translateY(-50%); /* Center vertically */
+}

@@ -79,7 +79,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         try {
           const parsed = JSON.parse(msg);
 
-          console.log("WebSocket message received:", msg);
+          // console.log("WebSocket message received:", msg);
 
           if (parsed.type === "pong" && parsed.timestamp) {
             const startTime = parseInt(parsed.timestamp);

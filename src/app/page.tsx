@@ -3,7 +3,7 @@
 import { useSocket } from "@/components/contexts/socket-provider";
 import { Gauge } from "@/components/ui/gauge";
 import { HeadingIndicator } from "@/components/ui/heading-indicator";
-import { VerticalCenteredGauge } from "@/components/ui/vertical-centered-gauge";
+import { LinearGauge } from "@/components/ui/linear-gauge";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -33,27 +33,92 @@ export default function Home() {
     };
   }, [socket]);
 
-  // useEffect(() => {
-  //   const set = () => {
-  //     setValue((v) =>
-  //       Math.round(Math.max(0, Math.min(100, v + (Math.random() * 10 - 5))))
-  //     );
-  //     setTimeout(set, 1000);
-  //   };
-  //   set();
-  // }, []);
-
   return (
-    <div className="flex gap-2 p-2">
+    <div className="flex w-full h-full items-center justify-center gap-2 p-2">
       <title>MAIN</title>
-      <div className="flex px-2 gap-2 border bg-white">
-        <Gauge value={data.speed} label="SPEED" suffix="kts" />
-        <HeadingIndicator value={data.heading} />
+      <div className="flex flex-col p-2 gap-2 border bg-white">
+        <div className="flex gap-2">
+          <Gauge value={data.speed} label="SPEED" suffix="kts" />
+          <HeadingIndicator value={data.heading} />
+        </div>
+        <div>
+          <LinearGauge
+            value={data.propulsion_angle}
+            centered
+            low={-45}
+            dangerLow={-35}
+            high={45}
+            dangerHigh={35}
+            direction="horizontal"
+            label="PROP ANGLE"
+            suffix="°"
+          />
+        </div>
       </div>
-      <div className="flex flex-col px-2 gap-2 border bg-white">
-        <Gauge value={data.vbat} label="VBAT" size={100} />
-        <Gauge value={data.current_bat} label="BAT AMPS " size={100} />
-        <Gauge value={data.temp_bat} label="TEMP BAT" size={100} />
+      <div className="flex gap-2">
+        <div className="flex p-2 gap-2 border bg-white">
+          <div className="flex flex-col gap-2">
+            <Gauge
+              value={data.vbat}
+              label="VBAT"
+              size={150}
+              low={300}
+              high={400}
+              suffix="V"
+            />
+            <Gauge
+              value={data.current_bat}
+              label="BAT AMPS "
+              size={150}
+              suffix="A"
+            />
+            <Gauge
+              value={data.temp_bat}
+              label="TEMP BAT"
+              size={150}
+              suffix="°"
+            />
+          </div>
+
+          <LinearGauge
+            value={data.battery_percent}
+            label="BAT %"
+            suffix="%"
+            thickness={30}
+            dangerLow={20}
+          />
+
+          <div className="flex flex-col gap-2">
+            <Gauge
+              value={data.bms_temp}
+              label="BMS TEMP"
+              suffix="°"
+              size={150}
+            />
+            <Gauge
+              value={data.bat_comp_temp}
+              label="BAT COMP TEMP"
+              suffix="°"
+              size={150}
+            />
+          </div>
+        </div>
+
+        <div className="flex p-2 border bg-white gap-2 w-[170px] justify-between ">
+          <LinearGauge
+            value={data.rpm_a}
+            thickness={40}
+            high={4000}
+            label="RPM A"
+          />
+          <LinearGauge value={data.motor_synch} thickness={15} suffix="%" />
+          <LinearGauge
+            value={data.rpm_b}
+            thickness={40}
+            high={4000}
+            label="RPM B"
+          />
+        </div>
       </div>
     </div>
   );
