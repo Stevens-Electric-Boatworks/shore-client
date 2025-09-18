@@ -36,9 +36,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
     const connect = () => {
       console.log(process.env.NEXT_PUBLIC_SOCKET_URL);
-      if (!process.env.NEXT_PUBLIC_SOCKET_URL)
-        throw new Error("WebSocket URL is not set!");
-      ws = new WebSocket(process.env.NEXT_PUBLIC_SOCKET_URL);
+      ws = new WebSocket(
+        process.env.NEXT_PUBLIC_SOCKET_URL || "wss://eboat.thiagoja.com/api"
+      );
 
       ws.onopen = () => {
         console.log("WebSocket connected");
