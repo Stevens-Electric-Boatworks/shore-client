@@ -51,6 +51,13 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
           })
         );
 
+        ws!.send(
+          JSON.stringify({
+            type: "ping",
+            timestamp: Date.now(),
+          })
+        );
+
         setIsConnecting(false);
         setIsFailed(false);
       };
@@ -107,7 +114,6 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!socket) return;
-
     const interval = setInterval(() => {
       if (socket.readyState === WebSocket.OPEN) {
         socket.send(
@@ -117,8 +123,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
           })
         );
       }
-    }, 3000); // Ping every 5 seconds
-
+    }, 3000); // Ping every 3 seconds
     return () => clearInterval(interval);
   }, [socket]);
 
