@@ -4,15 +4,17 @@ import { useState } from "react";
 import { useError } from "./contexts/error-provider";
 import { NavButton } from "./ui/nav-button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useSocketStore } from "@/store/useSocketStore";
 
 export const AlarmsTable = () => {
   const [selected, setSelected] = useState(0);
-  const { errors, acknowledgeAlarm } = useError();
 
-  const sorted = errors.slice().sort((a, b) => {
+  const { alarms } = useSocketStore();
+
+  const sorted = alarms.slice().sort((a, b) => {
     // First, sort by type: ERRORs before WARNINGs
     if (a.type !== b.type) {
-      return a.type === "ERROR" ? -1 : 1;
+      return a.type.toUpperCase() === "ERROR" ? -1 : 1;
     }
     // Then, sort by timestamp: newest first
     return b.timestamp.getTime() - a.timestamp.getTime();
@@ -48,7 +50,7 @@ export const AlarmsTable = () => {
               >
                 <td>{e.timestamp.toLocaleString()}</td>
                 <td>
-                  {e.type === "ERROR" && (
+                  {e.type.toUpperCase() === "ERROR" && (
                     <div
                       className={`text-sm text-center bg-red-500 px-2 mx-2 text-white border border-red-800 ${
                         e.acknowledged ? "" : "blink-slow"
@@ -57,7 +59,7 @@ export const AlarmsTable = () => {
                       ERR
                     </div>
                   )}
-                  {e.type === "WARNING" && (
+                  {e.type.toUpperCase() === "WARNING" && (
                     <div
                       className={`text-sm text-center bg-yellow-500 px-2 mx-2 text-white border border-red-800 ${
                         e.acknowledged ? "" : "blink-slow"
@@ -89,14 +91,20 @@ export const AlarmsTable = () => {
         </NavButton>
         <NavButton
           onClick={() => {
-            if (selected < errors.length - 1) setSelected((s) => s + 1);
+            if (selected < alarms.length - 1) setSelected((s) => s + 1);
           }}
         >
           <ChevronDown />
         </NavButton>
         <button
           onClick={() => {
-            acknowledgeAlarm(sorted[selected].id);
+            const selectedId = sorted[selected]?.id;
+            if (!selectedId) return;
+            useSocketStore.setState((state) => ({
+              alarms: state.alarms.map((a) =>
+                a.id === selectedId ? { ...a, acknowledged: true } : a
+              ),
+            }));
           }}
           className="p-2 min-w-[180px] border-2 
             cursor-pointer flex justify-center bg-orange-400 text-white font-bold 
@@ -112,7 +120,11 @@ export const AlarmsTable = () => {
           onClick={() => {
             sorted.forEach((alarm) => {
               if (!alarm.acknowledged) {
-                acknowledgeAlarm(alarm.id);
+                useSocketStore.setState((state) => ({
+                  alarms: state.alarms.map((a) =>
+                    a.id === alarm.id ? { ...a, acknowledged: true } : a
+                  ),
+                }));
               }
             });
           }}

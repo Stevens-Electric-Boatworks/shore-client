@@ -1,10 +1,12 @@
 "use client";
 
-import { useSocket } from "@/components/contexts/socket-provider";
 import LatencyChart from "@/components/latency-chart";
 import { LogTable } from "@/components/log-table";
+import { useSocketStore } from "@/store/useSocketStore";
 
 export default function DiagPage() {
+  const { ws } = useSocketStore();
+
   return (
     <div className="flex flex-col gap-2 h-full">
       <title>Diagnostic Information</title>
@@ -14,28 +16,32 @@ export default function DiagPage() {
             <p className="font-bold uppercase">Socket Status</p>
             <table className="w-full">
               <tbody>
-                {/* <tr>
+                <tr>
                   <td>Connected?</td>
                   <td className=" text-end">
-                    {socket?.readyState === 1 ? "YES" : "NO"}
+                    {ws?.readyState === 1 ? "YES" : "NO"}
                   </td>
                 </tr>
                 <tr>
                   <td>Socket URL</td>
-                  <td className="text-end">{socket?.url}</td>
+                  <td className="text-end">{ws?.url}</td>
                 </tr>
                 <tr>
                   <td>Ready State</td>
-                  <td className="text-end">{socket?.readyState}</td>
+                  <td className="text-end">{ws?.readyState}</td>
                 </tr>
                 <tr>
                   <td>Is Connecting?</td>
-                  <td className="text-end">{isConnecting ? "YES" : "NO"}</td>
+                  <td className="text-end">
+                    {ws?.readyState === WebSocket.CONNECTING ? "YES" : "NO"}
+                  </td>
                 </tr>
                 <tr>
-                  <td>Is Failed?</td>
-                  <td className="text-end">{isFailed ? "YES" : "NO"}</td>
-                </tr> */}
+                  <td>Is Closed?</td>
+                  <td className="text-end">
+                    {ws?.readyState === WebSocket.CLOSED ? "YES" : "NO"}
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>

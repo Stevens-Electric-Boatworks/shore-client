@@ -1,26 +1,41 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useError } from "./contexts/error-provider";
-import { useSocket } from "./contexts/socket-provider";
 import { useSocketStore } from "@/store/useSocketStore";
 
 export const StatusBar = () => {
   const [now, setNow] = useState(new Date());
-  const { errors } = useError();
+  const { alarms, ws, latencies } = useSocketStore();
 
-  const isConnecting = false;
-  const isFailed = false;
-  const { latencies } = useSocketStore();
+  const [isFailed, setIsFailed] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(true);
 
   useEffect(() => {
+    if (ws) {
+      ws.addEventListener("open", () => {
+        setIsConnecting(false);
+      });
+
+      ws.addEventListener("error", () => {
+        setIsFailed(true);
+        setIsConnecting(false);
+      });
+
+      ws.addEventListener("close", () => {
+        setIsFailed(true);
+        setIsConnecting(false);
+      });
+    }
+
     const handle = setInterval(() => {
       setNow(new Date());
     }, 200);
-    return () => clearInterval(handle);
-  }, []);
+    return () => {
+      clearInterval(handle);
+    };
+  }, [ws]);
 
-  const isError = errors.filter((e) => e.type === "ERROR").length > 0;
+  const isError = alarms.filter((e) => e.type === "error").length > 0;
 
   const connectionColor = () => {
     const green = "from-lime-200 to-lime-500";
@@ -48,7 +63,7 @@ export const StatusBar = () => {
 
       <div className="flex flex-1/2 justify-center gap-2">
         <div className="bg-gradient-to-b from-lime-200 to-lime-500 px-2 border-x">
-          <p className="">POWER ON</p>
+          <p className="">CAN BUS ON</p>
         </div>
 
         {isError ? (

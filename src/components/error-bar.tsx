@@ -2,22 +2,23 @@
 
 import { usePathname } from "next/navigation";
 import { useError } from "./contexts/error-provider";
+import { useSocketStore } from "@/store/useSocketStore";
 
 export const ErrorBar = () => {
   const pathname = usePathname();
-  const { errors, acknowledgeAlarm } = useError();
+  const { alarms } = useSocketStore();
 
   // Don't show if on ALARMS page, since user will manage the alarms there
   if (pathname === "/alarms") return;
 
   // The error to display
-  const error = errors
+  const error = alarms
     .filter((e) => !e.acknowledged)
     .slice()
     .sort((a, b) => {
       // First, sort by type: ERRORs before WARNINGs
       if (a.type !== b.type) {
-        return a.type === "ERROR" ? -1 : 1;
+        return a.type.toUpperCase() === "ERROR" ? -1 : 1;
       }
       // Then, sort by timestamp: newest first
       return b.timestamp.getTime() - a.timestamp.getTime();
@@ -30,7 +31,7 @@ export const ErrorBar = () => {
     <div
       className={`flex px-2 bg-gradient-to-b border-t-1 
         ${
-          error.type === "ERROR"
+          error.type.toUpperCase() === "ERROR"
             ? "from-red-300 to-red-600 text-white"
             : "from-yellow-100 to-yellow-300"
         }
@@ -38,11 +39,18 @@ export const ErrorBar = () => {
     >
       <p>
         {error.timestamp.toLocaleString()} :{" "}
-        {error.type === "ERROR" ? "[ERR]" : "[WARN]"} {error.message}
+        {error.type.toUpperCase() === "ERROR" ? "[ERR]" : "[WARN]"}{" "}
+        {error.message}
       </p>
 
       <button
-        onClick={() => acknowledgeAlarm(error.id)}
+        onClick={() => {
+          useSocketStore.setState((state) => ({
+            alarms: state.alarms.map((a) =>
+              a.id === error.id ? { ...a, acknowledged: true } : a
+            ),
+          }));
+        }}
         className="ml-auto text-sm border px-2 cursor-pointer hover:bg-black/30"
       >
         ACKNOWLEDGE

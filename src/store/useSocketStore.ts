@@ -7,6 +7,7 @@ type WebSocketState = {
   logs: any[];
   alarms: any[];
   latencies: any[];
+  ws: WebSocket | null;
   connect: () => void;
   disconnect: () => void;
 };
@@ -16,14 +17,15 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
   logs: [],
   alarms: [],
   latencies: [],
+  ws: null,
 
   connect: () => {
-    if ((get() as any).ws) return;
+    if (get().ws) return;
 
     const ws = new WebSocket("wss://eboat.thiagoja.com/api");
 
     // send a ping object every 3 seconds (include timestamp so server can pong back)
-    const pingInterval = setInterval(() => {
+    const ping = () => {
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(
           JSON.stringify({
@@ -32,15 +34,18 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
           })
         );
       }
-    }, 3000);
+    };
+    const pingInterval = setInterval(ping, 3000);
 
-    // ensure the interval is cleared when the socket closes
+    // ensure the interval is cleared and store cleared when the socket closes
     ws.addEventListener("close", () => {
       clearInterval(pingInterval);
+      set({ ws: null });
     });
 
-    ws.onopen = (e) => {
+    ws.onopen = () => {
       console.log(`Connected to WebSocket on ${ws.url}`);
+      ping();
       ws.send(
         JSON.stringify({
           type: "ident",
@@ -63,7 +68,18 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
       }
 
       if (type === "data") {
-        set((state) => ({ data: [parsed.payload, ...state.data] }));
+        set((state) => ({ data: [parsed.payload, ...state.data].slice(-500) }));
+      }
+
+      if (type === "alarm") {
+        const alarm = {
+          ...parsed.payload,
+          acknowledged: false,
+          timestamp: new Date(parsed.payload.timestamp),
+        };
+        set((state) => ({
+          alarms: [alarm, ...state.alarms].slice(-300),
+        }));
       }
 
       if (type === "log") {
@@ -85,15 +101,15 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
       console.log("WebSocket connection closed.");
     };
 
-    (get() as any).ws = ws;
+    // expose the socket in the store
+    set({ ws });
   },
 
   disconnect: () => {
-    const ws = (get() as any).ws;
-    console.log(JSON.stringify(ws));
+    const ws = get().ws;
     if (ws) {
       ws.close();
-      (get() as any).ws = null;
+      set({ ws: null });
     }
   },
 }));
