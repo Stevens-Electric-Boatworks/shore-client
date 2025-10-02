@@ -5,6 +5,7 @@ import { useSocket } from "./contexts/socket-provider";
 import { useSocketStore } from "@/store/useSocketStore";
 
 type LogData = {
+  id: string;
   timestamp: Date;
   level: number;
   name?: string;
@@ -17,7 +18,7 @@ type LogData = {
 export const LogTable = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const [data, setData] = useState<LogData[]>([]);
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState<string | null>(null);
   const { logs } = useSocketStore();
 
   // useEffect(() => {
@@ -94,7 +95,7 @@ export const LogTable = () => {
   //   return () => socket.removeEventListener("message", handleSocketMessage);
   // }, [socket]);
 
-  const selectedLog = logs[selected];
+  const selectedLog = logs.find((e) => e.id === selected);
 
   return (
     <div className="flex gap-2">
@@ -116,11 +117,11 @@ export const LogTable = () => {
               <tr
                 key={idx}
                 className={
-                  idx === selected
+                  e.id === selected
                     ? "cursor-pointer text-white bg-blue-600"
                     : `hover:cursor-pointer hover:bg-blue-200`
                 }
-                onClick={() => setSelected(idx)}
+                onClick={() => setSelected(e.id)}
               >
                 <td>{e.timestamp.toLocaleString()}</td>
                 <td>{e.level}</td>

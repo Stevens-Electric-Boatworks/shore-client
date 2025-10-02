@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
+import { v4 as uuidv4 } from "uuid";
 
 type WebSocketState = {
   data: any[];
@@ -66,7 +67,13 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
       }
 
       if (type === "log") {
-        set((state) => ({ logs: [parsed.payload, ...state.logs] }));
+        const parsedAgain = parsed.payload.map((e: any) => ({
+          ...e,
+          timestamp: new Date(e.timestamp),
+          id: uuidv4(),
+        }));
+        console.log(JSON.stringify(parsedAgain));
+        set((state) => ({ logs: [...parsedAgain, ...state.logs] }));
       }
     };
 
