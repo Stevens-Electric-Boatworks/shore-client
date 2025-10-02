@@ -73,43 +73,41 @@ export const ErrorProvider = ({ children }: { children: React.ReactNode }) => {
     // },
   ]);
 
-  const { socket } = useSocket();
+  // useEffect(() => {
+  //   if (!socket) return;
 
-  useEffect(() => {
-    if (!socket) return;
+  //   const handleSocketMessage = (event: MessageEvent) => {
+  //     const msg = event.data as string;
+  //     try {
+  //       const parsed = JSON.parse(msg);
 
-    const handleSocketMessage = (event: MessageEvent) => {
-      const msg = event.data as string;
-      try {
-        const parsed = JSON.parse(msg);
+  //       if (parsed.type === "alarm" && parsed.action) {
+  //         if (parsed.action === "set") {
+  //           setErrors((prevErrors) => [
+  //             ...prevErrors,
+  //             {
+  //               timestamp: new Date(parsed.payload.timestamp),
+  //               id: parsed.payload.id,
+  //               acknowledged: false,
+  //               message: parsed.payload.message || "",
+  //               type: parsed.payload.type === "WARNING" ? "WARNING" : "ERROR",
+  //             },
+  //           ]);
+  //         }
 
-        if (parsed.type === "alarm" && parsed.action) {
-          if (parsed.action === "set") {
-            setErrors((prevErrors) => [
-              ...prevErrors,
-              {
-                timestamp: new Date(parsed.payload.timestamp),
-                id: parsed.payload.id,
-                acknowledged: false,
-                message: parsed.payload.message || "",
-                type: parsed.payload.type === "WARNING" ? "WARNING" : "ERROR",
-              },
-            ]);
-          }
+  //         if (parsed.action === "remove") {
+  //           setErrors((prevErrors) =>
+  //             prevErrors.filter((error) => error.id !== parsed.payload.id)
+  //           );
+  //         }
+  //       }
+  //     } catch {}
+  //   };
 
-          if (parsed.action === "remove") {
-            setErrors((prevErrors) =>
-              prevErrors.filter((error) => error.id !== parsed.payload.id)
-            );
-          }
-        }
-      } catch {}
-    };
+  //   socket.addEventListener("message", handleSocketMessage);
 
-    socket.addEventListener("message", handleSocketMessage);
-
-    return () => socket.removeEventListener("message", handleSocketMessage);
-  }, [socket]);
+  //   return () => socket.removeEventListener("message", handleSocketMessage);
+  // }, [socket]);
 
   const acknowledgeAlarm = (id: number) => {
     if (!errors.find((v) => v.id === id)) return; // That error does not exist

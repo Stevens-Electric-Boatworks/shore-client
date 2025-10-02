@@ -14,6 +14,7 @@ import {
   Filler,
 } from "chart.js";
 import { useSocket } from "./contexts/socket-provider";
+import { useSocketStore } from "@/store/useSocketStore";
 
 // Register ChartJS components
 ChartJS.register(
@@ -42,31 +43,56 @@ interface LatencyChartProps {
 export default function LatencyChart({
   maxDataPoints = 50,
   showStats = true,
-  height = 300,
 }: LatencyChartProps) {
-  const { latency } = useSocket();
+  const { latencies } = useSocketStore();
   const [dataPoints, setDataPoints] = useState<LatencyDataPoint[]>([]);
 
   // Add new latency data points when latency updates
   useEffect(() => {
-    if (latency !== undefined) {
+    if (!latencies || latencies.length === 0) return;
+
+    setDataPoints((prev) => {
+      // Initialize from existing latencies when component mounts (or when prev is empty)
+      if (prev.length === 0) {
+        const n = Math.min(latencies.length, maxDataPoints);
+        // Assume latencies[0] is the newest; take the most recent n and reverse to oldest->newest
+        const recent = latencies.slice(0, n).reverse();
+        const now = Date.now();
+
+        const initialPoints: LatencyDataPoint[] = recent.map((lat, idx) => {
+          // space timestamps by 1s so labels appear in chronological order
+          const timestamp = now - (n - 1 - idx) * 1000;
+          return {
+            timestamp,
+            latency: lat,
+            label: new Date(timestamp).toLocaleTimeString(),
+          };
+        });
+
+        return initialPoints;
+      }
+
+      // Otherwise append only when there's a new/latest value
+      const latest = latencies[0];
+      if (latest === undefined) return prev;
+
+      const lastLatency = prev[prev.length - 1]?.latency;
+      if (latest === lastLatency) return prev; // avoid duplicates
+
       const newDataPoint: LatencyDataPoint = {
-        timestamp: latency.timestamp.getTime(),
-        latency: latency.value,
-        label: new Date(latency.timestamp).toLocaleTimeString(),
+        timestamp: Date.now(),
+        latency: latest,
+        label: new Date().toLocaleTimeString(),
       };
 
-      setDataPoints((prev) => {
-        const updated = [...prev, newDataPoint];
-        // Keep only the most recent data points
-        return updated.slice(-maxDataPoints);
-      });
-    }
-  }, [latency, maxDataPoints]);
+      const updated = [...prev, newDataPoint];
+      return updated.slice(-maxDataPoints);
+    });
+  }, [latencies, maxDataPoints]);
 
   // Calculate statistics
   const stats = {
-    current: latency?.value,
+    current: latencies[0],
     average:
       dataPoints.length > 0
         ? Math.round(
@@ -203,7 +229,7 @@ export default function LatencyChart({
       )}
 
       {/* Chart Container */}
-      <div style={{ height: `${height}px` }}>
+      <div className="h-[200px] xl:h-[350px]">
         {dataPoints.length > 0 ? (
           <Line data={chartData} options={chartOptions} />
         ) : (

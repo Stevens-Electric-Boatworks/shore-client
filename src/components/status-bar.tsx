@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import { useError } from "./contexts/error-provider";
 import { useSocket } from "./contexts/socket-provider";
+import { useSocketStore } from "@/store/useSocketStore";
 
 export const StatusBar = () => {
   const [now, setNow] = useState(new Date());
   const { errors } = useError();
-  const { latency, isConnecting, isFailed } = useSocket();
+
+  const isConnecting = false;
+  const isFailed = false;
+  const { latencies } = useSocketStore();
 
   useEffect(() => {
     const handle = setInterval(() => {
@@ -25,7 +29,7 @@ export const StatusBar = () => {
 
     if (isFailed) return red;
     if (isConnecting) return yellow;
-    if ((latency?.value || 0) > 1000) return yellow;
+    if ((latencies[0]?.value || 0) > 1000) return yellow;
 
     return green;
   };
@@ -63,7 +67,7 @@ export const StatusBar = () => {
             `}
         >
           <p>
-            {connectionText()} {latency ? `[${latency.value} ms]` : ""}
+            {connectionText()} {latencies[0] ? `[${latencies[0]} ms]` : ""}
           </p>
         </div>
       </div>

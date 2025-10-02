@@ -28,6 +28,10 @@ export const ButtonsBar = () => {
         ALARM HISTORY
       </NavButton>
       <NavButton onClick={() => router.push("/diag")}>DIAGNOSTIC</NavButton>
+      <div className="ml-auto flex gap-2">
+        <NavButton>SETTINGS</NavButton>
+        <NavButton>HELP</NavButton>
+      </div>
     </div>
   );
 };
