@@ -46,6 +46,16 @@ export default function Home() {
           <Gauge value={data[0]?.current} label="CURRENT" suffix="A" />
           <Gauge value={data[0]?.power} label="POWER" suffix="W" />
         </div>
+        <div>
+          <LinearGauge
+            value={data[0]?.rpm}
+            direction="horizontal"
+            low={-4400}
+            high={4400}
+            centered
+            label="RPM"
+          />
+        </div>
       </div>
     </div>
   );

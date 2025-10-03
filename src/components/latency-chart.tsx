@@ -63,9 +63,9 @@ export default function LatencyChart({
           // space timestamps by 1s so labels appear in chronological order
           const timestamp = now - (n - 1 - idx) * 1000;
           return {
-            timestamp,
-            latency: lat,
-            label: new Date(timestamp).toLocaleTimeString(),
+            timestamp: lat.timestamp.getTime(),
+            latency: lat.value,
+            label: lat.timestamp.toLocaleTimeString(),
           };
         });
 
@@ -73,7 +73,7 @@ export default function LatencyChart({
       }
 
       // Otherwise append only when there's a new/latest value
-      const latest = latencies[0];
+      const latest = latencies[0].value;
       if (latest === undefined) return prev;
 
       const lastLatency = prev[prev.length - 1]?.latency;
@@ -144,13 +144,13 @@ export default function LatencyChart({
         },
       },
       title: {
-        display: true,
+        display: false,
         text: "WebSocket Latency",
         font: {
-          size: 16,
+          size: 12,
           weight: "bold" as const,
         },
-        padding: 20,
+        padding: 0,
       },
       tooltip: {
         mode: "index" as const,
@@ -202,10 +202,10 @@ export default function LatencyChart({
     <div className="bg-white">
       {/* Statistics Bar */}
       {showStats && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
           <div className="text-center">
             <div className="text-2xl font-bold text-blue-600">
-              {stats.current ?? "--"}
+              {stats.current?.value ?? "--"}
             </div>
             <div className="text-sm text-gray-600">Current (ms)</div>
           </div>

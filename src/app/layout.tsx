@@ -32,7 +32,7 @@ export default function RootLayout({
           <div className="flex flex-col h-screen w-screen">
             <StatusBar />
             <div className="absolute h-full w-full -z-50 pinstripe" />
-            <div className="flex flex-col flex-1 p-2">{children}</div>
+            <div className="flex flex-col flex-1 p-2 min-h-0">{children}</div>
             <ErrorBar />
             <ButtonsBar />
           </div>

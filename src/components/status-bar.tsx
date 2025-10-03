@@ -82,7 +82,8 @@ export const StatusBar = () => {
             `}
         >
           <p>
-            {connectionText()} {latencies[0] ? `[${latencies[0]} ms]` : ""}
+            {connectionText()}{" "}
+            {latencies[0] ? `[${latencies[0].value} ms]` : ""}
           </p>
         </div>
       </div>

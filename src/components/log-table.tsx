@@ -98,38 +98,40 @@ export const LogTable = () => {
   const selectedLog = logs.find((e) => e.id === selected);
 
   return (
-    <div className="flex gap-2">
-      <div className="border flex-2 h-full">
-        <table className="w-full">
-          <colgroup>
-            <col span={1} className="w-[180px]" />
-            <col span={1} className="w-[80px]" />
-          </colgroup>
-          <thead className="text-left border-b bg-gradient-to-b from-zinc-100 to-zinc-300">
-            <tr>
-              <td>Timestamp</td>
-              <td>Level</td>
-              <td>Message</td>
-            </tr>
-          </thead>
-          <tbody>
-            {logs.map((e, idx) => (
-              <tr
-                key={idx}
-                className={
-                  e.id === selected
-                    ? "cursor-pointer text-white bg-blue-600"
-                    : `hover:cursor-pointer hover:bg-blue-200`
-                }
-                onClick={() => setSelected(e.id)}
-              >
-                <td>{e.timestamp.toLocaleString()}</td>
-                <td>{e.level}</td>
-                <td>{e.msg}</td>
+    <div className="flex gap-2 min-h-0">
+      <div className="flex flex-col flex-2">
+        <div className="border h-full">
+          <table className="w-full table-fixed">
+            <colgroup>
+              <col span={1} className="w-[180px]" />
+              <col span={1} className="w-[80px]" />
+            </colgroup>
+            <thead className="text-left border-b bg-gradient-to-b sticky top-0 from-zinc-100 to-zinc-300 z-10">
+              <tr>
+                <td>Timestamp</td>
+                <td>Level</td>
+                <td>Message</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="overflow-auto">
+              {logs.map((e, idx) => (
+                <tr
+                  key={idx}
+                  className={
+                    e.id === selected
+                      ? "cursor-pointer text-white bg-blue-600"
+                      : `hover:cursor-pointer hover:bg-blue-200`
+                  }
+                  onClick={() => setSelected(e.id)}
+                >
+                  <td>{e.timestamp.toLocaleString()}</td>
+                  <td>{e.level}</td>
+                  <td>{e.msg}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div className="border flex-1">
         <div className="px-2 border-b bg-gradient-to-b from-zinc-100 to-zinc-300">

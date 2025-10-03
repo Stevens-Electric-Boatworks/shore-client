@@ -6,7 +6,10 @@ type WebSocketState = {
   data: any[];
   logs: any[];
   alarms: any[];
-  latencies: any[];
+  latencies: {
+    value: number;
+    timestamp: Date;
+  }[];
   ws: WebSocket | null;
   connect: () => void;
   disconnect: () => void;
@@ -63,7 +66,13 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
         const startTime = parseInt(parsed.timestamp);
         const delta = Date.now() - startTime;
         set((state) => ({
-          latencies: [delta, ...state.latencies].slice(0, 30),
+          latencies: [
+            {
+              value: delta,
+              timestamp: new Date(startTime),
+            },
+            ...state.latencies,
+          ].slice(0, 30),
         }));
       }
 

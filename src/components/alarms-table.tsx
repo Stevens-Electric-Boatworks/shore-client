@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useError } from "./contexts/error-provider";
 import { NavButton } from "./ui/nav-button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useSocketStore } from "@/store/useSocketStore";
@@ -21,60 +20,62 @@ export const AlarmsTable = () => {
   });
 
   return (
-    <div className="flex flex-col gap-2 flex-1">
-      <div className="flex flex-col flex-1 bg-white border">
-        <table className="w-full">
-          <colgroup>
-            <col span={1} className="w-[180px]" />
-            <col span={1} className="w-[80px]" />
-            <col span={1} className="w-[70px]" />
-          </colgroup>
-          <thead className="text-left border-b bg-gradient-to-b from-zinc-100 to-zinc-300">
-            <tr>
-              <td>Timestamp</td>
-              <td>Category</td>
-              <td>Alarm ID</td>
-              <td>Description</td>
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.map((e, idx) => (
-              <tr
-                key={idx}
-                className={
-                  idx === selected
-                    ? "bg-blue-600 text-white cursor-pointer"
-                    : "hover:bg-blue-200 cursor-pointer"
-                }
-                onClick={() => setSelected(idx)}
-              >
-                <td>{e.timestamp.toLocaleString()}</td>
-                <td>
-                  {e.type.toUpperCase() === "ERROR" && (
-                    <div
-                      className={`text-sm text-center bg-red-500 px-2 mx-2 text-white border border-red-800 ${
-                        e.acknowledged ? "" : "blink-slow"
-                      }`}
-                    >
-                      ERR
-                    </div>
-                  )}
-                  {e.type.toUpperCase() === "WARNING" && (
-                    <div
-                      className={`text-sm text-center bg-yellow-500 px-2 mx-2 text-white border border-red-800 ${
-                        e.acknowledged ? "" : "blink-slow"
-                      }`}
-                    >
-                      WARN
-                    </div>
-                  )}
-                </td>
-                <td>{e.id}</td>
-                <td>{e.message}</td>
+    <div className="flex flex-col gap-2 flex-1 min-h-0">
+      <div className="flex flex-col flex-1 min-h-0 bg-white border">
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          <table className="w-full table-fixed">
+            <colgroup>
+              <col span={1} className="w-[180px]" />
+              <col span={1} className="w-[80px]" />
+              <col span={1} className="w-[70px]" />
+            </colgroup>
+            <thead className="text-left border-b bg-gradient-to-b from-zinc-100 to-zinc-300 sticky top-0 z-10">
+              <tr>
+                <td>Timestamp</td>
+                <td>Category</td>
+                <td>Alarm ID</td>
+                <td>Description</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sorted.map((e, idx) => (
+                <tr
+                  key={idx}
+                  className={
+                    idx === selected
+                      ? "bg-blue-600 text-white cursor-pointer"
+                      : "hover:bg-blue-200 cursor-pointer"
+                  }
+                  onClick={() => setSelected(idx)}
+                >
+                  <td>{e.timestamp.toLocaleString()}</td>
+                  <td>
+                    {e.type.toUpperCase() === "ERROR" && (
+                      <div
+                        className={`text-sm text-center bg-red-500 px-2 mx-2 text-white border border-red-800 ${
+                          e.acknowledged ? "" : "blink-slow"
+                        }`}
+                      >
+                        ERR
+                      </div>
+                    )}
+                    {e.type.toUpperCase() === "WARNING" && (
+                      <div
+                        className={`text-sm text-center bg-yellow-500 px-2 mx-2 text-white border border-red-800 ${
+                          e.acknowledged ? "" : "blink-slow"
+                        }`}
+                      >
+                        WARN
+                      </div>
+                    )}
+                  </td>
+                  <td>{e.id}</td>
+                  <td>{e.message}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {sorted.length <= 0 && (
           <div className="bg-gradient-to-b from-lime-200 to-lime-500 px-2 border-t mt-auto">
             No active alarms. Enjoy this moment! ☺️
@@ -138,6 +139,12 @@ export const AlarmsTable = () => {
             ? "ALL ACKNOWLEDGED"
             : "ACKNOWLEDGE ALL"}
         </button>
+        <div className="flex  gap-6 items-center bg-white border px-2">
+          <p className="font-bold">
+            {alarms.filter((e) => !e.acknowledged).length} Not Acknowledged
+          </p>
+          <p>{alarms.length} Total</p>
+        </div>
       </div>
     </div>
   );
