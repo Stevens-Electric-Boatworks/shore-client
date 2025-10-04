@@ -15,12 +15,12 @@ export default function DiagPage() {
           <BuildInfo />
         </div>
 
-        <div className="p-2 border bg-white w-full">
+        <div className=" p-2 border bg-white w-full">
           <LatencyChart maxDataPoints={30} showStats={true} />
         </div>
       </div>
-      <div className="flex-1 min-h-0">
-        <div className="border bg-white p-2 h-full min-h-0 overflow-auto">
+      <div className="flex-1 flex min-h-0">
+        <div className="flex-1 flex flex-col border bg-white p-2 ">
           <p className="font-bold">LOGGING</p>
           <LogTable />
         </div>
