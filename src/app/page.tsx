@@ -39,10 +39,10 @@ export default function Home() {
         <div className="flex gap-2">
           <Gauge data={data.get("voltage")} label="VOLTAGE" suffix="V" />
           <Gauge data={data.get("throttle_mv")} label="THR MV" suffix="mV" />
-          <Gauge data={data.get("torque")} label="TORQUE" suffix="" />
+          <Gauge data={data.get("torque")} label="TORQUE" suffix="nM"/>
         </div>
         <div className="flex gap-2">
-          <Gauge data={data.get("torque")} label="MOTOR TEMP" suffix="°" />
+          <Gauge data={data.get("motor_temp")} label="MOTOR TEMP" suffix="°" />
           <Gauge data={data.get("current")} label="CURRENT" suffix="A" />
           <Gauge data={data.get("power")} label="POWER" suffix="W" />
         </div>
