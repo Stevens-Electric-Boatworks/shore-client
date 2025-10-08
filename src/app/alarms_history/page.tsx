@@ -1,3 +1,5 @@
 export default function AlarmsHistoryPage() {
-  return <div></div>;
+  return <div>
+    <title>TODO: Alarm History</title>
+  </div>;
 }
