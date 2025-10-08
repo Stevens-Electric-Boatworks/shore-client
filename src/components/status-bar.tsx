@@ -67,9 +67,9 @@ export const StatusBar = () => {
     if(isConnecting || isFailed) return "CAN BUS UNKNOWN"
     if (can_bus_state == 0) return "CAN BUS OFFLINE";
     if (can_bus_state == 1) return "CAN BUS ON";
-    if (can_bus_state == 2) return "CAN Bus TEST";
+    if (can_bus_state == 2) return "CAN BUS TEST";
 
-    return "CAN BUS Unknown";
+    return "CAN BUS UNKNOWN";
   };
 
   const connectionText = () => {
