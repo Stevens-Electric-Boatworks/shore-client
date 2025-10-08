@@ -34,15 +34,15 @@ export default function Home() {
 
   return (
     <div className="flex w-full h-full items-center justify-center gap-2 p-2">
-      <title>MAIN</title>
+      <title>Main Page</title>
       <div className="flex flex-col p-2 gap-2 border bg-white">
         <div className="flex gap-2">
           <Gauge data={data.get("voltage")} label="VOLTAGE" suffix="V" />
           <Gauge data={data.get("throttle_mv")} label="THR MV" suffix="mV" />
-          <Gauge data={data.get("torque")} label="TORQUE" suffix="" />
+          <Gauge data={data.get("torque")} label="TORQUE" suffix="nM"/>
         </div>
         <div className="flex gap-2">
-          <Gauge data={data.get("torque")} label="MOTOR TEMP" suffix="°" />
+          <Gauge data={data.get("motor_temp")} label="MOTOR TEMP" suffix="°" />
           <Gauge data={data.get("current")} label="CURRENT" suffix="A" />
           <Gauge data={data.get("power")} label="POWER" suffix="W" />
         </div>

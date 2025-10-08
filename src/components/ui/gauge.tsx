@@ -51,7 +51,7 @@ export const Gauge = ({
           } as React.CSSProperties
         }
       >
-        {data?.value}
+        {data?.value.toFixed()}
         {suffix}
       </div>
       <p
