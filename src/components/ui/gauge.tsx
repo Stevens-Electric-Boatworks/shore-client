@@ -3,7 +3,8 @@
 import "./gauge.css";
 
 export const Gauge = ({
-  value,
+  // value,
+  data,
   size = 200,
   low = 0,
   high = 100,
@@ -11,7 +12,11 @@ export const Gauge = ({
   label,
   suffix,
 }: {
-  value?: number;
+  // value?: number; #
+  data?: {
+    value: number;
+    timestamp: Date;
+  }
   size?: number;
   low?: number;
   high?: number;
@@ -35,18 +40,18 @@ export const Gauge = ({
             "--size": `${size}px`,
             "--value": Math.max(
               0,
-              Math.min(1, (value || 0 - low) / (high - low))
+              Math.min(1, (data?.value || 0 - low) / (high - low))
             ),
             "--color":
               danger !== undefined
-                ? (value || 0) > danger
+                ? (data?.value || 0) > danger
                   ? "red"
                   : "lime"
                 : "lime",
           } as React.CSSProperties
         }
       >
-        {value?.toFixed()}
+        {data?.value}
         {suffix}
       </div>
       <p
@@ -60,7 +65,7 @@ export const Gauge = ({
       >
         {label}
       </p>
-      {value === undefined && (
+      {(data === undefined || data.value === undefined || new Date().getTime() - data.timestamp.getTime() > 500) && (
         <svg
           style={{
             position: "absolute",
