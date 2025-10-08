@@ -34,7 +34,7 @@ export default function Home() {
 
   return (
     <div className="flex w-full h-full items-center justify-center gap-2 p-2">
-      <title>MAIN</title>
+      <title>DEV-PAGE</title>
       <div className="flex flex-col p-2 gap-2 border bg-white">
         <div className="flex gap-2">
           <Gauge data={data.get("voltage")} label="VOLTAGE" suffix="V" />

@@ -1,23 +1,23 @@
 "use client";
 
-export const HeadingIndicator = ({ value }: { value?: number }) => {
+export const HeadingIndicator = ({ data }: { data?: {value: number; timestamp: Date} }) => {
   return (
     <div className="w-[200px] h-[200px]  relative overflow-hidden">
       <p className="absolute inset-0 flex items-center justify-center text-white text-xl z-10 top-[80px]">
-        {value !== undefined ? `${value}°` : "—"}
+        {data?.value !== undefined ? `${data.value}°` : "—"}
       </p>
       <img
         src="/compass.png"
         alt="Compass"
         className="absolute w-[200px] h-[200px] transition-transform duration-500 ease-in-out"
-        style={{ transform: `rotate(-${value}deg)` }}
+        style={{ transform: `rotate(-${data?.value}deg)` }}
       />
       <img
         src="/overlay.png"
         alt="Overlay"
         className="absolute w-[200px] h-[200px]"
       />
-      {value === undefined && (
+      {(data === undefined || data.value === undefined || new Date().getTime() - data.timestamp.getTime() > 500) && (
         <svg
           style={{
             position: "absolute",

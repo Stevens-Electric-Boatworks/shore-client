@@ -33,6 +33,7 @@ export const ButtonsBar = () => {
       <div className="ml-auto flex gap-2">
         <NavButton>SETTINGS</NavButton>
         <NavButton>HELP</NavButton>
+        <NavButton onClick={() => router.push("/dev-page")}>DEV-PAGE</NavButton>
       </div>
     </div>
   );
