@@ -3,6 +3,10 @@
 import "./linear-gauge.css";
 
 type LinearGaugeProps = {
+  data?: {
+    value: number;
+    timestamp: Date;
+  }
   value?: number;
   low?: number;
   high?: number;
@@ -16,7 +20,8 @@ type LinearGaugeProps = {
 };
 
 export const LinearGauge = ({
-  value,
+  // value,
+  data,
   low = 0,
   high = 100,
   dangerLow,
@@ -29,14 +34,14 @@ export const LinearGauge = ({
 }: LinearGaugeProps) => {
   // Normalize value between 0 and 100
   const normalizedValue =
-    value === undefined
+    data?.value === undefined
       ? 0
       : centered
       ? Math.max(
           -100,
-          Math.min(100, ((value - (low + high) / 2) / ((high - low) / 2)) * 100)
+          Math.min(100, ((data.value - (low + high) / 2) / ((high - low) / 2)) * 100)
         )
-      : Math.max(0, Math.min(100, ((value - low) / (high - low)) * 100));
+      : Math.max(0, Math.min(100, ((data.value - low) / (high - low)) * 100));
 
   return (
     <div className="flex flex-col items-center gap-2 ">
@@ -80,8 +85,8 @@ export const LinearGauge = ({
               ? { width: `${normalizedValue}%` }
               : { height: `${normalizedValue}%` }),
             backgroundColor:
-              (dangerLow && value && value <= dangerLow) ||
-              (dangerHigh && value && value >= dangerHigh)
+              (dangerLow && data?.value && data?.value <= dangerLow) ||
+              (dangerHigh && data?.value && data?.value >= dangerHigh)
                 ? "red"
                 : "lime",
           }}
@@ -92,7 +97,7 @@ export const LinearGauge = ({
           <p className={`relative text-sm font-bold`}>{label}</p>
         )}
         <p className="text-sm">
-          {value?.toFixed()}
+          {data?.value?.toFixed()}
           {suffix}
         </p>
       </div>

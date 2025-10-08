@@ -37,18 +37,18 @@ export default function Home() {
       <title>MAIN</title>
       <div className="flex flex-col p-2 gap-2 border bg-white">
         <div className="flex gap-2">
-          <Gauge value={data[0]?.voltage} label="VOLTAGE" suffix="V" />
-          <Gauge value={data[0]?.throttle_mv} label="THR MV" suffix="mV" />
-          <Gauge value={data[0]?.torque} label="TORQUE" suffix="" />
+          <Gauge data={data.get("voltage")} label="VOLTAGE" suffix="V" />
+          <Gauge data={data.get("throttle_mv")} label="THR MV" suffix="mV" />
+          <Gauge data={data.get("torque")} label="TORQUE" suffix="" />
         </div>
         <div className="flex gap-2">
-          <Gauge value={data[0]?.motor_temp} label="MOTOR TEMP" suffix="°" />
-          <Gauge value={data[0]?.current} label="CURRENT" suffix="A" />
-          <Gauge value={data[0]?.power} label="POWER" suffix="W" />
+          <Gauge data={data.get("torque")} label="MOTOR TEMP" suffix="°" />
+          <Gauge data={data.get("current")} label="CURRENT" suffix="A" />
+          <Gauge data={data.get("power")} label="POWER" suffix="W" />
         </div>
         <div>
           <LinearGauge
-            value={data[0]?.rpm}
+            data={data.get("rpm")}
             direction="horizontal"
             low={-4400}
             high={4400}
