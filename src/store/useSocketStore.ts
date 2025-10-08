@@ -30,8 +30,8 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
   connect: () => {
     if (get().ws) return;
 
-    // const ws = new WebSocket("wss://eboat.thiagoja.com/api");
-    const ws = new WebSocket("ws://localhost:5001/api");
+    const ws = new WebSocket("wss://shore.stevenseboat.org/api");
+    // const ws = new WebSocket("ws://localhost:5001/api");
 
     // send a ping object every 3 seconds (include timestamp so server can pong back)
     const ping = () => {
