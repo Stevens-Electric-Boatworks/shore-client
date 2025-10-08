@@ -3,10 +3,13 @@ import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 
 type WebSocketState = {
-  data: Map<String, {
+  data: Map<
+    string,
+    {
       value: any;
       timestamp: Date;
-    }>;
+    }
+  >;
   logs: any[];
   alarms: any[];
   latencies: {
@@ -28,7 +31,8 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
   connect: () => {
     if (get().ws) return;
 
-    const ws = new WebSocket("wss://eboat.thiagoja.com/api");
+    const ws = new WebSocket("wss://shore.stevenseboat.org/api");
+    // const ws = new WebSocket("wss://eboat.thiagoja.com/api");
     // const ws = new WebSocket("ws://localhost:5001/api");
 
     // send a ping object every 3 seconds (include timestamp so server can pong back)
@@ -90,10 +94,10 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
 
           // 2. Iterate over each key in the received payload (e.g., "voltage", "rpm")
           for (const key in payload) {
-              newDataMap.set(key, {
-                value: payload[key],
-                timestamp: receivedAt,
-              });
+            newDataMap.set(key, {
+              value: payload[key],
+              timestamp: receivedAt,
+            });
           }
 
           // 4. Return the new state with the updated map
