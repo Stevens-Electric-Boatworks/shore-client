@@ -37,11 +37,13 @@ export const StatusBar = () => {
 
   const isError = alarms.filter((e) => e.type === "error").length > 0;
 
-  const connectionColor = () => {
-    const green = "from-lime-200 to-lime-500";
-    const yellow = "from-yellow-100 to-yellow-300";
-    const red = "from-red-300 to-red-600 text-white";
+  const green = "from-lime-200 to-lime-500 text-black";
+  const blue = "from-blue-400 to-blue-600 text-white border-black";
+  const red = "from-red-300 to-red-600 text-white border-black";
+  const grey = "from-gray-200 to-gray-400 text-black";
+  const yellow = "from-yellow-100 to-yellow-300 text-black";
 
+  const connectionColor = () => {
     if (isFailed) return red;
     if (isConnecting) return yellow;
     if ((latencies[0]?.value || 0) > 1000) return yellow;
@@ -50,11 +52,6 @@ export const StatusBar = () => {
   };
 
   const can_bus_color = () => {
-    const green = "from-lime-200 to-lime-500";
-    const blue = "from-blue-500 to-blue-700 text-white";
-    const red = "from-red-300 to-red-600 text-white";
-    const grey = "from-gray-200 to-gray-400 text-black";
-
     if (isConnecting || isFailed) return grey;
     if (can_bus_state == 0) return red;
     if (can_bus_state == 1) return green;
@@ -77,6 +74,18 @@ export const StatusBar = () => {
     return "CONNECTION OK";
   };
 
+  const systemStatus = () => {
+    if (can_bus_state < 0) return "SYSTEMS UNAVAIL";
+    if (isError) return "ACTIVE ALARMS";
+    return "SYSTEMS OK";
+  };
+
+  const systemStatusColor = () => {
+    if (can_bus_state < 0) return grey;
+    if (isError) return red;
+    return green;
+  };
+
   return (
     <div className="flex px-2 border-b-1 shadow-md bg-gradient-to-b from-blue-100 to-blue-300">
       <div className="lg:flex flex-1 hidden">
@@ -88,20 +97,14 @@ export const StatusBar = () => {
           <p className="">{can_connection_state()}</p>
         </div>
 
-        {isError ? (
-          <div className="bg-gradient-to-b from-red-300 to-red-600 text-white border-black px-2 border-x">
-            <p>ACTIVE FAULTS</p>
-          </div>
-        ) : (
-          <div className="bg-gradient-to-b from-lime-200 to-lime-500 px-2 border-x">
-            <p>SYSTEMS OK</p>
-          </div>
-        )}
+        <div
+          className={`border-black px-2 border-x bg-gradient-to-b ${systemStatusColor()}`}
+        >
+          <p>{systemStatus()}</p>
+        </div>
 
         <div
-          className={`px-2 border-x bg-gradient-to-b  border-black
-            ${connectionColor()}
-            `}
+          className={`px-2 border-x bg-gradient-to-b  border-black ${connectionColor()}`}
         >
           <p>
             {connectionText()}{" "}
