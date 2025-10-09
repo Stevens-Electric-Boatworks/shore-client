@@ -53,23 +53,22 @@ export const StatusBar = () => {
     const green = "from-lime-200 to-lime-500";
     const blue = "from-blue-500 to-blue-700 text-white";
     const red = "from-red-300 to-red-600 text-white";
-    const grey = "from-gray-300 to-gray-600 text-black";
+    const grey = "from-gray-200 to-gray-400 text-black";
 
-    if(isConnecting || isFailed) return grey;
+    if (isConnecting || isFailed) return grey;
     if (can_bus_state == 0) return red;
     if (can_bus_state == 1) return green;
     if (can_bus_state == 2) return blue;
     return grey;
   };
 
-  
   const can_connection_state = () => {
-    if(isConnecting || isFailed) return "CAN BUS UNKNOWN"
+    if (isConnecting || isFailed) return "CAN BUS UNAVAIL";
     if (can_bus_state == 0) return "CAN BUS OFFLINE";
     if (can_bus_state == 1) return "CAN BUS ON";
     if (can_bus_state == 2) return "CAN BUS TEST";
 
-    return "CAN BUS UNKNOWN";
+    return "CAN BUS UNAVAIL";
   };
 
   const connectionText = () => {
@@ -77,7 +76,6 @@ export const StatusBar = () => {
     if (isFailed) return "CONNECTION ERR";
     return "CONNECTION OK";
   };
-  
 
   return (
     <div className="flex px-2 border-b-1 shadow-md bg-gradient-to-b from-blue-100 to-blue-300">
@@ -87,7 +85,7 @@ export const StatusBar = () => {
 
       <div className="flex flex-1/2 justify-center gap-2">
         <div className={`bg-gradient-to-b px-2 border-x ${can_bus_color()}`}>
-            <p className="">{can_connection_state()}</p>
+          <p className="">{can_connection_state()}</p>
         </div>
 
         {isError ? (
