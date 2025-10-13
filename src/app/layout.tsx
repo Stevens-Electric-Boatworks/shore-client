@@ -2,10 +2,7 @@
 
 import "./globals.css";
 import "ldrs/react/LineSpinner.css";
-import {
-  SocketProvider,
-  useSocket,
-} from "@/components/contexts/socket-provider";
+import Cookies from "js-cookie";
 import { ErrorProvider } from "@/components/contexts/error-provider";
 import { StatusBar } from "@/components/status-bar";
 import { ErrorBar } from "@/components/error-bar";
@@ -21,7 +18,8 @@ export default function RootLayout({
   const { connect, disconnect } = useSocketStore();
 
   useEffect(() => {
-    connect();
+    const url = Cookies.get("ws-url") || "wss://shore.stevenseboat.org/api";
+    connect(url);
     return () => disconnect();
   }, [connect, disconnect]);
 

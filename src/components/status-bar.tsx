@@ -12,7 +12,10 @@ export const StatusBar = () => {
 
   useEffect(() => {
     if (ws) {
+      setIsConnecting(ws.readyState === WebSocket.OPEN);
+
       ws.addEventListener("open", () => {
+        setIsFailed(false);
         setIsConnecting(false);
       });
 
@@ -26,14 +29,16 @@ export const StatusBar = () => {
         setIsConnecting(false);
       });
     }
+  }, [ws]);
 
+  useEffect(() => {
     const handle = setInterval(() => {
       setNow(new Date());
     }, 200);
     return () => {
       clearInterval(handle);
     };
-  }, [ws]);
+  }, []);
 
   const isError = alarms.filter((e) => e.type === "error").length > 0;
 
