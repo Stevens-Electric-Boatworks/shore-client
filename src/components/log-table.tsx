@@ -62,9 +62,13 @@ export const LogTable = () => {
                       className={`cursor-pointer ${
                         log.id === selected
                           ? "bg-blue-600 text-white"
-                          : idx % 2 === 0
-                          ? "bg-white hover:bg-blue-200"
-                          : "bg-gray-50 hover:bg-blue-200"
+                          : log.level === 40
+                          ? "bg-red-300 font-semibold hover:bg-red-500"
+                          : log.level == 30
+                            ? "bg-yellow-300 hover:bg-yellow-500 hover:italic"
+                            : idx % 2 == 0
+                              ? "bg-gray-100 hover:bg-blue-200 "
+                              : "bg-gray-0 hover:bg-blue-200"
                       }`}
                       onClick={() => setSelected(log.id)}
                     >
@@ -96,8 +100,13 @@ export const LogTable = () => {
                   })}
                 </p>
               </div>
-              <div className="border p-2 bg-zinc-200/50">
-                <p className="underline">Level</p>
+              <div className={`border p-2 ${
+                selectedLog.level === 40
+                          ? "bg-red-400/50"
+                          : selectedLog.level == 30
+                          ? "bg-yellow-400/50"
+                            : "bg-zinc-200/50"
+              }`}>                <p className="underline">Level</p>
                 <p className="font-mono">{selectedLog.level}</p>
               </div>
               <div className="border p-2 bg-zinc-200/50">
