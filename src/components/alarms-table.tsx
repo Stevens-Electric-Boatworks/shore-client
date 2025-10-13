@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavButton } from "./ui/nav-button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useSocketStore } from "@/store/useSocketStore";
@@ -17,6 +17,40 @@ export const AlarmsTable = () => {
     }
     // Then, sort by timestamp: newest first
     return b.timestamp.getTime() - a.timestamp.getTime();
+  });
+
+  const acknowledgeAll = () => {
+    sorted.forEach((alarm) => {
+      if (!alarm.acknowledged) {
+        useSocketStore.setState((state) => ({
+          alarms: state.alarms.map((a) =>
+            a.id === alarm.id ? { ...a, acknowledged: true } : a
+          ),
+        }));
+      }
+    });
+  };
+
+  const acknowledgeSelected = () => {
+    const selectedId = sorted[selected]?.id;
+    if (!selectedId) return;
+    useSocketStore.setState((state) => ({
+      alarms: state.alarms.map((a) =>
+        a.id === selectedId ? { ...a, acknowledged: true } : a
+      ),
+    }));
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "A") {
+        if (event.shiftKey) {
+          acknowledgeAll();
+          return;
+        }
+        acknowledgeSelected();
+      }
+    };
   });
 
   return (
@@ -98,15 +132,7 @@ export const AlarmsTable = () => {
           <ChevronDown />
         </NavButton>
         <button
-          onClick={() => {
-            const selectedId = sorted[selected]?.id;
-            if (!selectedId) return;
-            useSocketStore.setState((state) => ({
-              alarms: state.alarms.map((a) =>
-                a.id === selectedId ? { ...a, acknowledged: true } : a
-              ),
-            }));
-          }}
+          onClick={acknowledgeSelected}
           className="p-2 min-w-[180px] border-2 
             cursor-pointer flex justify-center bg-orange-400 text-white font-bold 
             border-t-orange-300 border-l-orange-300 border-b-orange-500 
@@ -118,17 +144,7 @@ export const AlarmsTable = () => {
             : "ACKNOWLEDGE"}
         </button>
         <button
-          onClick={() => {
-            sorted.forEach((alarm) => {
-              if (!alarm.acknowledged) {
-                useSocketStore.setState((state) => ({
-                  alarms: state.alarms.map((a) =>
-                    a.id === alarm.id ? { ...a, acknowledged: true } : a
-                  ),
-                }));
-              }
-            });
-          }}
+          onClick={acknowledgeAll}
           className="p-2 min-w-[220px] border-2 
             cursor-pointer flex justify-center bg-orange-400 text-white font-bold 
             border-t-orange-300 border-l-orange-300 border-b-orange-500 
