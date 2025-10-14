@@ -39,7 +39,7 @@ export default function Home() {
         <div className="flex gap-2">
           <Gauge data={data.get("voltage")} label="VOLTAGE" suffix="V" />
           <Gauge data={data.get("throttle_mv")} label="THR MV" suffix="mV" />
-          <Gauge data={data.get("torque")} label="TORQUE" suffix="nM"/>
+          <Gauge data={data.get("torque")} label="TORQUE" suffix="nM" />
         </div>
         <div className="flex gap-2">
           <Gauge data={data.get("motor_temp")} label="MOTOR TEMP" suffix="°" />
@@ -57,6 +57,28 @@ export default function Home() {
           />
         </div>
       </div>
+      <div className="flex p-2 gap-2 border bg-white">
+          <div className="flex flex-col gap-2">
+             <Gauge
+              data={data.get("inlet_temp")}
+              label="INLET TEMP"
+              size={200}
+              low={-30}
+              high={30}
+              suffix="°"
+            />
+            <Gauge
+              data={data.get("outlet_temp")}
+              label="OUTLET TEMP"
+              size={200}
+              low={-30}
+              high={30}
+              suffix="°"
+            />
+           
+          </div>
+        </div>
+
     </div>
   );
 }
