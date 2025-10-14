@@ -8,6 +8,7 @@ export const Gauge = ({
   size = 200,
   low = 0,
   high = 100,
+  warn,
   danger,
   label,
   suffix,
@@ -16,14 +17,20 @@ export const Gauge = ({
   data?: {
     value: number;
     timestamp: Date;
-  }
+  };
   size?: number;
   low?: number;
   high?: number;
+  warn?: number;
   danger?: number;
   label?: string;
   suffix?: string;
 }) => {
+  const isDanger =
+    danger !== undefined && data?.value !== undefined && data.value >= danger;
+  const isWarn =
+    warn !== undefined && data?.value !== undefined && data.value >= warn;
+
   return (
     <div
       style={{
@@ -42,12 +49,7 @@ export const Gauge = ({
               0,
               Math.min(1, (data?.value || 0 - low) / (high - low))
             ),
-            "--color":
-              danger !== undefined
-                ? (data?.value || 0) > danger
-                  ? "red"
-                  : "lime"
-                : "lime",
+            "--color": isDanger ? "red" : isWarn ? "orange" : "lime",
           } as React.CSSProperties
         }
       >
@@ -65,7 +67,9 @@ export const Gauge = ({
       >
         {label}
       </p>
-      {(data === undefined || data.value === undefined || new Date().getTime() - data.timestamp.getTime() > 500) && (
+      {(data === undefined ||
+        data.value === undefined ||
+        new Date().getTime() - data.timestamp.getTime() > 1500) && (
         <svg
           style={{
             position: "absolute",
