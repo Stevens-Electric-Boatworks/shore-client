@@ -1,10 +1,18 @@
 "use client";
 
 import { NavButton } from "@/components/ui/nav-button";
+import useKeybind from "@/hooks/use-keybind";
 import { useRouter } from "next/navigation";
 
 export default function DiagnosticHomePage() {
   const router = useRouter();
+
+  useKeybind("l", () => router.push("/diag/logs"));
+  useKeybind("g", () => router.push("/diag/gnss"));
+  useKeybind("s", () => router.push("/diag/socket"));
+  useKeybind("m", () => router.push("/diag/motor"));
+  useKeybind("a", () => router.push("/diag/alarms_history"));
+  useKeybind("L", () => router.push("/diag/legacy"));
 
   return (
     <div className="flex flex-col h-full">
