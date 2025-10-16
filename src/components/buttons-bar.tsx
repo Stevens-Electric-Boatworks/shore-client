@@ -2,12 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import { NavButton } from "./ui/nav-button";
-import { useError } from "./contexts/error-provider";
 import { useSocketStore } from "@/store/useSocketStore";
+import usePlatformSpecificKeybind from "@/hooks/use-platform-keybind";
 
 export const ButtonsBar = () => {
   const router = useRouter();
   const { alarms } = useSocketStore();
+
+  usePlatformSpecificKeybind("m", () => router.push("/"));
+  usePlatformSpecificKeybind("a", () => router.push("/alarms"));
+  usePlatformSpecificKeybind("d", () => router.push("/diag"));
 
   return (
     <div className="flex gap-2 p-2 bg-gradient-to-b from-zinc-100 to-zinc-300 border-t relative items-center">
@@ -26,9 +30,6 @@ export const ButtonsBar = () => {
       >
         ACTIVE ALARMS
       </button>
-      <NavButton onClick={() => router.push("/alarms_history")}>
-        ALARM HISTORY
-      </NavButton>
       <NavButton onClick={() => router.push("/diag")}>DIAGNOSTIC</NavButton>
       <div className="ml-auto flex gap-2">
         <NavButton>SETTINGS</NavButton>
