@@ -1,5 +1,6 @@
 "use client";
 
+import { Map } from "@/components/map-view";
 import { Gauge } from "@/components/ui/gauge";
 import { HeadingIndicator } from "@/components/ui/heading-indicator";
 import { LinearGauge } from "@/components/ui/linear-gauge";
@@ -37,9 +38,12 @@ export default function Home() {
       <title>Main Page</title>
       <div className="flex flex-col p-2 gap-2 border bg-white">
         <Gauge data={data.get("speed")} label="SPEED" high={60} suffix="kt" />
-        <HeadingIndicator data={data.get("heading")} />
-        <p>Lat: {data.get("lat")?.value}</p>
-        <p>Long: {data.get("long")?.value}</p>
+        <Map />
+        <div>
+          <p className="text-sm">Lat: {data.get("lat")?.value}</p>
+          <p className="text-sm">Long: {data.get("long")?.value}</p>
+          <p className="text-sm">Heading: {data.get("heading")?.value}°</p>
+        </div>
       </div>
       <div className="flex flex-col p-2 gap-2 border bg-white">
         <div className="flex gap-2">
