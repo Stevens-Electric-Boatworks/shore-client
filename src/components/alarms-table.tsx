@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { NavButton } from "./ui/nav-button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useSocketStore } from "@/store/useSocketStore";
+import useKeybind from "@/hooks/use-keybind";
 
 export const AlarmsTable = () => {
   const [selected, setSelected] = useState(0);
@@ -41,17 +42,18 @@ export const AlarmsTable = () => {
     }));
   };
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "A") {
-        if (event.shiftKey) {
-          acknowledgeAll();
-          return;
-        }
-        acknowledgeSelected();
-      }
-    };
-  });
+  const selectionDown = () => {
+    if (selected < alarms.length - 1) setSelected((s) => s + 1);
+  };
+
+  const selectionUp = () => {
+    if (selected > 0) setSelected((s) => s - 1);
+  };
+
+  useKeybind("A", () => acknowledgeAll());
+  useKeybind("a", () => acknowledgeSelected());
+  useKeybind("ArrowUp", () => selectionUp());
+  useKeybind("ArrowDown", () => selectionDown());
 
   return (
     <div className="flex flex-col gap-2 flex-1 min-h-0">
@@ -102,6 +104,14 @@ export const AlarmsTable = () => {
                         WARN
                       </div>
                     )}
+                    {e.type.toUpperCase() !== "WARNING" &&
+                      e.type.toUpperCase() !== "ERROR" && (
+                        <div
+                          className={`text-sm text-center border mx-2 bg-zinc-200`}
+                        >
+                          ???
+                        </div>
+                      )}
                   </td>
                   <td>{e.id}</td>
                   <td>{e.message}</td>
@@ -117,18 +127,10 @@ export const AlarmsTable = () => {
         )}
       </div>
       <div className="flex gap-2">
-        <NavButton
-          onClick={() => {
-            if (selected > 0) setSelected((s) => s - 1);
-          }}
-        >
+        <NavButton onClick={selectionUp}>
           <ChevronUp />
         </NavButton>
-        <NavButton
-          onClick={() => {
-            if (selected < alarms.length - 1) setSelected((s) => s + 1);
-          }}
-        >
+        <NavButton onClick={selectionDown}>
           <ChevronDown />
         </NavButton>
         <button
