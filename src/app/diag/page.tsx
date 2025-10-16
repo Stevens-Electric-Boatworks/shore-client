@@ -1,29 +1,28 @@
 "use client";
 
-import { BuildInfo } from "@/components/build-info";
-import LatencyChart from "@/components/latency-chart";
-import { LogTable } from "@/components/log-table";
-import { SocketStatus } from "@/components/socket-status";
+import { NavButton } from "@/components/ui/nav-button";
+import { useRouter } from "next/navigation";
 
-export default function DiagPage() {
+export default function DiagnosticHomePage() {
+  const router = useRouter();
+
   return (
-    <div className="flex flex-col gap-2 h-full min-h-0">
-      <title>Diagnostic Information</title>
-      <div className="flex gap-2 min-h-0">
-        <div className="flex flex-col gap-2">
-          <SocketStatus />
-          <BuildInfo />
-        </div>
-
-        <div className=" p-2 border bg-white w-full">
-          <LatencyChart maxDataPoints={30} showStats={true} />
-        </div>
-      </div>
-      <div className="flex-1 flex min-h-0">
-        <div className="flex-1 flex flex-col border bg-white p-2 ">
-          <p className="font-bold">LOGGING</p>
-          <LogTable />
-        </div>
+    <div className="flex flex-col h-full">
+      <title>Select Diagnostic Module</title>
+      <p className="text-xl font-bold mb-4">Select Diagnostic Module</p>
+      <div className="grid grid-cols-3 grid-rows-5 h-full gap-2">
+        <NavButton onClick={() => router.push("/diag/logs")}>LOGS</NavButton>
+        <NavButton onClick={() => router.push("/diag/gnss")}>GNSS</NavButton>
+        <NavButton onClick={() => router.push("/diag/socket")}>
+          SOCKET
+        </NavButton>
+        <NavButton onClick={() => router.push("/diag/motor")}>MOTOR</NavButton>
+        <NavButton onClick={() => router.push("/diag/alarm_history")}>
+          ALARM HISTORY
+        </NavButton>
+        <NavButton onClick={() => router.push("/diag/legacy")}>
+          LEGACY
+        </NavButton>
       </div>
     </div>
   );
