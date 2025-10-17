@@ -65,10 +65,10 @@ export const LogTable = () => {
                           : log.level === 40
                           ? "bg-red-300 font-semibold hover:bg-red-500"
                           : log.level == 30
-                            ? "bg-yellow-300 hover:bg-yellow-500 hover:italic"
-                            : idx % 2 == 0
-                              ? "bg-gray-100 hover:bg-blue-200 "
-                              : "bg-gray-0 hover:bg-blue-200"
+                          ? "bg-yellow-300 hover:bg-yellow-500 hover:italic"
+                          : idx % 2 == 0
+                          ? "bg-gray-100 hover:bg-blue-200 "
+                          : "bg-gray-0 hover:bg-blue-200"
                       }`}
                       onClick={() => setSelected(log.id)}
                     >
@@ -85,7 +85,7 @@ export const LogTable = () => {
         </div>
       </div>
       <div className="flex-1 flex flex-col gap-2">
-        <div className="flex-1 min-h-0 overflow-y-auto border">
+        <div className="flex-1 min-h-0 overflow-y-auto border bg-white">
           <div className="sticky top-0 border-b bg-gradient-to-b from-zinc-100 to-zinc-300 px-2">
             Log Detail
           </div>
@@ -100,13 +100,17 @@ export const LogTable = () => {
                   })}
                 </p>
               </div>
-              <div className={`border p-2 ${
-                selectedLog.level === 40
-                          ? "bg-red-400/50"
-                          : selectedLog.level == 30
-                          ? "bg-yellow-400/50"
-                            : "bg-zinc-200/50"
-              }`}>                <p className="underline">Level</p>
+              <div
+                className={`border p-2 ${
+                  selectedLog.level === 40
+                    ? "bg-red-400/50"
+                    : selectedLog.level == 30
+                    ? "bg-yellow-400/50"
+                    : "bg-zinc-200/50"
+                }`}
+              >
+                {" "}
+                <p className="underline">Level</p>
                 <p className="font-mono">{selectedLog.level}</p>
               </div>
               <div className="border p-2 bg-zinc-200/50">
