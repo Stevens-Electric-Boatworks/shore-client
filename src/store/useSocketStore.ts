@@ -34,7 +34,6 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
     if (get().ws) return;
 
     const ws = new WebSocket(url);
-    // const ws = new WebSocket("ws://localhost:5001/api");
 
     // send a ping object every 3 seconds (include timestamp so server can pong back)
     const ping = () => {
@@ -136,10 +135,22 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
 
     ws.onerror = (error) => {
       console.error("WebSocket error:", error);
+      if (ws) {
+        ws.close();
+      }
     };
 
     ws.onclose = () => {
       console.log("WebSocket connection closed.");
+
+      console.log("Attempting new connection...");
+      const reconnectDelay = 2000 + Math.floor(Math.random() * 2000);
+      setTimeout(() => {
+        if (!get().ws) {
+          console.log(`Reconnecting to ${url} after ${reconnectDelay}ms...`);
+          get().connect(url);
+        }
+      }, reconnectDelay);
     };
 
     // expose the socket in the store

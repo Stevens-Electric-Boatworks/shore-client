@@ -20,13 +20,13 @@ export const StatusBar = () => {
       });
 
       ws.addEventListener("error", () => {
-        setIsFailed(true);
-        setIsConnecting(false);
+        setIsFailed(false);
+        setIsConnecting(true);
       });
 
       ws.addEventListener("close", () => {
-        setIsFailed(true);
-        setIsConnecting(false);
+        setIsFailed(false);
+        setIsConnecting(true);
       });
     }
   }, [ws]);
@@ -113,7 +113,9 @@ export const StatusBar = () => {
         >
           <p>
             {connectionText()}{" "}
-            {latencies[0] ? `[${latencies[0].value} ms]` : ""}
+            {!isConnecting && !isFailed && latencies[0]
+              ? `[${latencies[0].value} ms]`
+              : ""}
           </p>
         </div>
       </div>
