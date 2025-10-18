@@ -5,7 +5,8 @@ import { useRef } from "react";
 import Cookies from "js-cookie";
 
 export const SocketStatus = () => {
-  const { ws, latencies, disconnect, connect } = useSocketStore();
+  const { ws, latencies, connected_clients, disconnect, connect } =
+    useSocketStore();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -69,6 +70,10 @@ export const SocketStatus = () => {
             <td className="text-end">
               {latencies[0]?.timestamp.toLocaleTimeString() ?? "---"}
             </td>
+          </tr>
+          <tr>
+            <td>Connected Clients</td>
+            <td className="text-end">{connected_clients}</td>
           </tr>
         </tbody>
       </table>

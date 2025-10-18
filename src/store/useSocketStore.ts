@@ -18,6 +18,7 @@ type WebSocketState = {
   }[];
   ws: WebSocket | null;
   can_bus_state: number;
+  connected_clients: number;
   connect: (url: string) => void;
   disconnect: () => void;
 };
@@ -29,6 +30,7 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
   latencies: [],
   can_bus_state: -1,
   ws: null,
+  connected_clients: 0,
 
   connect: (url: string) => {
     if (get().ws) return;
@@ -127,8 +129,14 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
       }
 
       if (type === "can_bus") {
-        set((state) => ({
+        set(() => ({
           can_bus_state: parsed.state,
+        }));
+      }
+
+      if (type === "clients") {
+        set(() => ({
+          connected_clients: parsed.payload.count,
         }));
       }
     };
