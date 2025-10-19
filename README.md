@@ -4,7 +4,7 @@
 
 This program is the client side of the shore computer application. Clients can connect to this web app through the browser and remotely monitor the functions of the boat.
 
-See [Dakdot/eboat-server](https://github.com/Dakdot/eboat-server) for the server side of the shore computer.
+See [Stevens-Electrical-Boatworks/shore-server](https://github.com/Stevens-Electric-Boatworks/shore-server)) for the server side of the shore computer.
 
 ### Built With
 
