@@ -38,7 +38,7 @@ export default function DataPage() {
       if (isAxiosError(err)) {
         setError(err.response?.data.error || "Unknown error.");
       } else {
-        setError(err.toString());
+        setError((err as Error).toString());
       }
     } finally {
       setIsLoading(false);
