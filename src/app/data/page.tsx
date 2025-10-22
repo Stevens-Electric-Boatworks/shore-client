@@ -29,7 +29,7 @@ export default function DataPage() {
       const toDate = new Date(toTimeRef.current.value);
 
       const res = await axios.get(
-        "http://shore.stevenseboat.org/api/download",
+        "https://shore.stevenseboat.org/api/download",
         {
           params: {
             from: fromDate.getTime(),
