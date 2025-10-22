@@ -28,12 +28,15 @@ export default function DataPage() {
       const fromDate = new Date(fromTimeRef.current.value);
       const toDate = new Date(toTimeRef.current.value);
 
-      const res = await axios.get("http://localhost:5001/download", {
-        params: {
-          from: fromDate.getTime(),
-          to: toDate.getTime(),
-        },
-      });
+      const res = await axios.get(
+        "http://shore.stevenseboat.org/api/download",
+        {
+          params: {
+            from: fromDate.getTime(),
+            to: toDate.getTime(),
+          },
+        }
+      );
     } catch (err) {
       if (isAxiosError(err)) {
         setError(err.response?.data.error || "Unknown error.");
