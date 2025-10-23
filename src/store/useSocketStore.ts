@@ -44,7 +44,7 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
           JSON.stringify({
             type: "ping",
             timestamp: Date.now().toString(),
-          })
+          }),
         );
       }
     };
@@ -63,7 +63,7 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
         JSON.stringify({
           type: "ident",
           message: "client",
-        })
+        }),
       );
     };
 
@@ -125,7 +125,9 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
           id: uuidv4(),
         }));
         console.log(JSON.stringify(parsedAgain));
-        set((state) => ({ logs: [...parsedAgain, ...state.logs] }));
+        set((state) => ({
+          logs: [...parsedAgain, ...state.logs].slice(-10000),
+        }));
       }
 
       if (type === "can_bus") {

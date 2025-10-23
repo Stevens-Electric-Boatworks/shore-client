@@ -51,10 +51,11 @@ export const LogTable = () => {
               </thead>
               <tbody>
                 {[...logs]
+                  .slice(-3000)
                   .sort(
                     (a, b) =>
                       new Date(a.timestamp).getTime() -
-                      new Date(b.timestamp).getTime()
+                      new Date(b.timestamp).getTime(),
                   )
                   .map((log, idx) => (
                     <tr
@@ -63,12 +64,12 @@ export const LogTable = () => {
                         log.id === selected
                           ? "bg-blue-600 text-white"
                           : log.level === 40
-                          ? "bg-red-300 font-semibold hover:bg-red-500"
-                          : log.level == 30
-                          ? "bg-yellow-300 hover:bg-yellow-500 hover:italic"
-                          : idx % 2 == 0
-                          ? "bg-gray-100 hover:bg-blue-200 "
-                          : "bg-gray-0 hover:bg-blue-200"
+                            ? "bg-red-300 font-semibold hover:bg-red-500"
+                            : log.level == 30
+                              ? "bg-yellow-300 hover:bg-yellow-500 hover:italic"
+                              : idx % 2 == 0
+                                ? "bg-gray-100 hover:bg-blue-200 "
+                                : "bg-gray-0 hover:bg-blue-200"
                       }`}
                       onClick={() => setSelected(log.id)}
                     >
@@ -105,8 +106,8 @@ export const LogTable = () => {
                   selectedLog.level === 40
                     ? "bg-red-400/50"
                     : selectedLog.level == 30
-                    ? "bg-yellow-400/50"
-                    : "bg-zinc-200/50"
+                      ? "bg-yellow-400/50"
+                      : "bg-zinc-200/50"
                 }`}
               >
                 {" "}
