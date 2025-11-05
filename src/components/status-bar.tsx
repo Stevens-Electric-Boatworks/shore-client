@@ -5,7 +5,7 @@ import { useSocketStore } from "@/store/useSocketStore";
 
 export const StatusBar = () => {
   const [now, setNow] = useState(new Date());
-  const { alarms, ws, latencies, can_bus_state } = useSocketStore();
+  const { alarms, ws, latencies, can_bus_state, data } = useSocketStore();
 
   const [isFailed, setIsFailed] = useState(false);
   const [isConnecting, setIsConnecting] = useState(true);
@@ -91,9 +91,26 @@ export const StatusBar = () => {
     return green;
   };
 
+  const timeString = () => {
+    const latestTimeDelta =
+      Date.now() - (data.get("boat_time")?.timestamp.getTime() || 0);
+    if (!data.get("boat_time") || latestTimeDelta > 5000)
+      return new Date().toLocaleString();
+    const boatTime = new Date(data.get("boat_time")?.value);
+    return boatTime.toLocaleString();
+  };
+
+  const timeColor = () => {
+    const latestTimeDelta =
+      Date.now() - (data.get("boat_time")?.timestamp.getTime() || 0);
+    if (!data.get("boat_time") || latestTimeDelta > 5000) return grey;
+    if (latestTimeDelta > 1500) return yellow;
+    return green;
+  };
+
   return (
-    <div className="flex px-2 border-b-1 shadow-md bg-gradient-to-b from-blue-100 to-blue-300">
-      <div className="lg:flex flex-1 hidden">
+    <div className="text-sm md:text-base flex px-2 border-b-1 shadow-md bg-gradient-to-b from-blue-100 to-blue-300">
+      <div className="lg:flex hidden">
         <p>SIT Electric Boatworks</p>
       </div>
 
@@ -120,8 +137,10 @@ export const StatusBar = () => {
         </div>
       </div>
 
-      <div className="flex flex-1 justify-end">
-        <p suppressHydrationWarning>{now.toLocaleString()}</p>
+      <div className="flex justify-end">
+        <div className={`border-x px-2 bg-gradient-to-b ${timeColor()}`}>
+          <p suppressHydrationWarning>{timeString()}</p>
+        </div>
       </div>
     </div>
   );
