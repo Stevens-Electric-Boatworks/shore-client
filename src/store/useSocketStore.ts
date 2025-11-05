@@ -8,6 +8,7 @@ type WebSocketState = {
     {
       value: any;
       timestamp: Date;
+      replay: boolean;
     }
   >;
   logs: any[];
@@ -44,7 +45,7 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
           JSON.stringify({
             type: "ping",
             timestamp: Date.now().toString(),
-          }),
+          })
         );
       }
     };
@@ -63,7 +64,7 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
         JSON.stringify({
           type: "ident",
           message: "client",
-        }),
+        })
       );
     };
 
@@ -99,6 +100,7 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
             newDataMap.set(key, {
               value: payload[key],
               timestamp: receivedAt,
+              replay: parsed.replay || false,
             });
           }
 

@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useSocketStore } from "@/store/useSocketStore";
+import { clearInterval } from "timers";
 
 export const StatusBar = () => {
-  const [now, setNow] = useState(new Date());
   const { alarms, ws, latencies, can_bus_state, data } = useSocketStore();
+
+  const [isBoatTime, setIsBoatTime] = useState(false);
 
   const [isFailed, setIsFailed] = useState(false);
   const [isConnecting, setIsConnecting] = useState(true);
@@ -33,17 +35,20 @@ export const StatusBar = () => {
 
   useEffect(() => {
     const handle = setInterval(() => {
-      setNow(new Date());
-    }, 200);
-    return () => {
-      clearInterval(handle);
-    };
+      setIsBoatTime((e) => !e);
+    });
+    return () => clearInterval(handle);
+  }, [setIsBoatTime]);
+
+  useEffect(() => {
+    const handle = setInterval(() => {});
+    return () => clearInterval(handle);
   }, []);
 
   const isError = alarms.filter((e) => e.type === "error").length > 0;
 
   const green = "from-lime-200 to-lime-500 text-black";
-  const blue = "from-blue-400 to-blue-600 text-white border-black";
+  const blue = "from-blue-300 to-indigo-600 text-white border-black";
   const red = "from-red-300 to-red-600 text-white border-black";
   const grey = "from-gray-200 to-gray-400 text-black";
   const yellow = "from-yellow-100 to-yellow-300 text-black";
@@ -105,6 +110,7 @@ export const StatusBar = () => {
       Date.now() - (data.get("boat_time")?.timestamp.getTime() || 0);
     if (!data.get("boat_time") || latestTimeDelta > 5000) return grey;
     if (latestTimeDelta > 1500) return yellow;
+    if (data.get("boat_time")?.replay) return blue;
     return green;
   };
 
