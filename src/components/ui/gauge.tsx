@@ -31,6 +31,13 @@ export const Gauge = ({
   const isWarn =
     warn !== undefined && data?.value !== undefined && data.value >= warn;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const displayValue = (data: any) => {
+    if (typeof data === "number") return data.toFixed();
+    if (!data) return "";
+    return "" + data;
+  };
+
   return (
     <div
       style={{
@@ -47,13 +54,13 @@ export const Gauge = ({
             "--size": `${size}px`,
             "--value": Math.max(
               0,
-              Math.min(1, (data?.value || 0 - low) / (high - low))
+              Math.min(1, (data?.value || 0 - low) / (high - low)),
             ),
             "--color": isDanger ? "red" : isWarn ? "orange" : "lime",
           } as React.CSSProperties
         }
       >
-        {data?.value.toFixed()}
+        {displayValue(data?.value)}
         {suffix}
       </div>
       <p
