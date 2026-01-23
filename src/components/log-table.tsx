@@ -77,7 +77,7 @@ export const LogTable = () => {
                         {new Date(log.timestamp).toLocaleString()}
                       </td>
                       <td className="px-2 text-right font-mono">{log.level}</td>
-                      <td className="px-2">{log.msg}</td>
+                      <td className="px-2">{log.message}</td>
                     </tr>
                   ))}
               </tbody>
@@ -116,7 +116,7 @@ export const LogTable = () => {
               </div>
               <div className="border p-2 bg-zinc-200/50">
                 <p className="underline">Message</p>
-                <p>{selectedLog.msg}</p>
+                <p>{selectedLog.message}</p>
               </div>
               <div className="border p-2 bg-zinc-200/50">
                 <p className="underline">File</p>
