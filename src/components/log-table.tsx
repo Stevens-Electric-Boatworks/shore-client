@@ -41,11 +41,13 @@ export const LogTable = () => {
               <colgroup>
                 <col span={1} width={200} />
                 <col span={1} width={80} />
+                <col span={1} width={80} />
               </colgroup>
               <thead className="sticky top-0 bg-gradient-to-b from-zinc-100 to-zinc-300 text-left border-b">
                 <tr>
                   <th className="px-2 border-b font-normal">Timestamp</th>
                   <th className="border-b font-normal">Level</th>
+                  <th className="border-b font-normal">Emitter</th>
                   <th className="border-b font-normal">Message</th>
                 </tr>
               </thead>
@@ -66,7 +68,7 @@ export const LogTable = () => {
                           : log.level === 40
                             ? "bg-red-300 font-semibold hover:bg-red-500"
                             : log.level == 30
-                              ? "bg-yellow-300 hover:bg-yellow-500 hover:italic"
+                              ? "bg-yellow-300 hover:bg-yellow-500"
                               : idx % 2 == 0
                                 ? "bg-gray-100 hover:bg-blue-200 "
                                 : "bg-gray-0 hover:bg-blue-200"
@@ -76,7 +78,14 @@ export const LogTable = () => {
                       <td className="px-2 whitespace-nowrap">
                         {new Date(log.timestamp).toLocaleString()}
                       </td>
-                      <td className="px-2 text-right font-mono">{log.level}</td>
+                      <td className="px-2 text-center font-mono">
+                        {log.level}
+                      </td>
+                      <td
+                        className={`text-center font-mono text-black/50 ${log.id === selected ? "text-white/60" : "text-black/50"}`}
+                      >
+                        {log.emitter}
+                      </td>
                       <td className="px-2">{log.message}</td>
                     </tr>
                   ))}
@@ -113,6 +122,10 @@ export const LogTable = () => {
                 {" "}
                 <p className="underline">Level</p>
                 <p className="font-mono">{selectedLog.level}</p>
+              </div>
+              <div className="border p-2 bg-zinc-200/50">
+                <p className="underline">Emitter</p>
+                <p className="font-mono">{selectedLog.emitter}</p>
               </div>
               <div className="border p-2 bg-zinc-200/50">
                 <p className="underline">Message</p>
