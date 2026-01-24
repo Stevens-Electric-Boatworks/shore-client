@@ -45,7 +45,7 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
           JSON.stringify({
             type: "ping",
             timestamp: Date.now().toString(),
-          })
+          }),
         );
       }
     };
@@ -64,7 +64,7 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
         JSON.stringify({
           type: "ident",
           message: "client",
-        })
+        }),
       );
     };
 
@@ -107,6 +107,14 @@ export const useSocketStore = create<WebSocketState>((set, get) => ({
           // 4. Return the new state with the updated map
           return { data: newDataMap };
         });
+      }
+
+      if (type === "session") {
+        set((state) => ({
+          data: new Map(),
+          logs: [],
+          alarms: [],
+        }));
       }
 
       if (type === "alarm") {
