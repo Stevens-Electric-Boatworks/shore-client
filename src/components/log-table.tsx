@@ -28,6 +28,29 @@ export const LogTable = () => {
     }
   }, [logs, isAtBottom]);
 
+  const evaluateLogEntryTableRowStyles = (
+    level: number,
+    id: string,
+    isEven: boolean,
+  ) => {
+    const strings: string[] = [];
+    strings.push("cursor-pointer");
+    if (level >= 40) strings.push("font-semibold");
+
+    if (id == selected) {
+      strings.push("bg-blue-600", "text-white");
+    } else if (level >= 40) {
+      strings.push("bg-red-300", "hover:bg-red-500");
+    } else if (level >= 30) {
+      strings.push("bg-yellow-300", "hover:bg-yellow-500");
+    } else {
+      strings.push("hover:bg-blue-200");
+      if (isEven) strings.push("bg-gray-100");
+      else strings.push("bg-white");
+    }
+    return strings.join(" ");
+  };
+
   return (
     <div className="flex flex-1 gap-2 min-h-0">
       <div className={`flex-2 min-h-0 border ${isAtBottom && "border-b-2"}`}>
@@ -62,17 +85,11 @@ export const LogTable = () => {
                   .map((log, idx) => (
                     <tr
                       key={log.id}
-                      className={`cursor-pointer ${
-                        log.id === selected
-                          ? "bg-blue-600 text-white"
-                          : log.level === 40
-                            ? "bg-red-300 font-semibold hover:bg-red-500"
-                            : log.level == 30
-                              ? "bg-yellow-300 hover:bg-yellow-500"
-                              : idx % 2 == 0
-                                ? "bg-gray-100 hover:bg-blue-200 "
-                                : "bg-gray-0 hover:bg-blue-200"
-                      }`}
+                      className={evaluateLogEntryTableRowStyles(
+                        log.level,
+                        log.id,
+                        idx % 2 == 0,
+                      )}
                       onClick={() => setSelected(log.id)}
                     >
                       <td className="px-2 whitespace-nowrap">
