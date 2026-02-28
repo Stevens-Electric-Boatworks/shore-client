@@ -8,7 +8,6 @@ import { StatusBar } from "@/components/status-bar";
 import { ErrorBar } from "@/components/error-bar";
 import { ButtonsBar } from "@/components/buttons-bar";
 import { useEffect } from "react";
-import { useSocketStore } from "@/store/useSocketStore";
 import { useStore } from "@/store";
 
 export default function RootLayout({

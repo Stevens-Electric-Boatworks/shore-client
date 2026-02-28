@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { NavButton } from "./ui/nav-button";
-import { useSocketStore } from "@/store/useSocketStore";
 import usePlatformSpecificKeybind from "@/hooks/use-platform-keybind";
 import { useStore } from "@/store";
 

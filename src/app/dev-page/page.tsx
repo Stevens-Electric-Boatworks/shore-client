@@ -3,10 +3,10 @@
 import { Gauge } from "@/components/ui/gauge";
 import { HeadingIndicator } from "@/components/ui/heading-indicator";
 import { LinearGauge } from "@/components/ui/linear-gauge";
-import { useSocketStore } from "@/store/useSocketStore";
+import { useStore } from "@/store";
 
 export default function Home() {
-  const { data } = useSocketStore();
+  const data = useStore((s) => s.data);
 
   return (
     <div className="flex w-full h-full items-center justify-center gap-2 p-2">
