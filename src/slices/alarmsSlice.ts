@@ -28,6 +28,13 @@ export const registerAlarmsSlice = (
       const alarm: Alarm = {
         ...(msg.payload as Alarm),
         raisedAt: new Date((msg.payload as { raisedAt: string }).raisedAt),
+        acknowledgedAt: (msg.payload as { acknowledgedAt?: string })
+          .acknowledgedAt
+          ? new Date((msg.payload as { acknowledgedAt: string }).acknowledgedAt)
+          : undefined,
+        resolvedAt: (msg.payload as { resolvedAt?: string }).resolvedAt
+          ? new Date((msg.payload as { resolvedAt: string }).resolvedAt)
+          : undefined,
       };
       set((state) => ({
         alarms: [alarm, ...state.alarms].slice(-500),
