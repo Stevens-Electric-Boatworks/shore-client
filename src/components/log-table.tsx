@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSocketStore } from "@/store/useSocketStore";
 import { NavButton } from "./ui/nav-button";
+import { useStore } from "@/store";
 
 export const LogTable = () => {
   // const [data, setData] = useState<LogData[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
-  const { logs } = useSocketStore();
+  const logs = useStore((s) => s.logs);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const selectedLog = logs.find((e) => e.id === selected);
@@ -228,7 +228,7 @@ export const LogTable = () => {
             <NavButton
               onClick={() => {
                 setSelected(null);
-                useSocketStore.setState((e) => ({ logs: [] }));
+                useStore.setState(() => ({ logs: [] }));
               }}
             >
               CLEAR LOGS

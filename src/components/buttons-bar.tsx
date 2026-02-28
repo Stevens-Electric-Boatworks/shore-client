@@ -4,10 +4,11 @@ import { useRouter } from "next/navigation";
 import { NavButton } from "./ui/nav-button";
 import { useSocketStore } from "@/store/useSocketStore";
 import usePlatformSpecificKeybind from "@/hooks/use-platform-keybind";
+import { useStore } from "@/store";
 
 export const ButtonsBar = () => {
   const router = useRouter();
-  const { alarms } = useSocketStore();
+  const alarms = useStore((s) => s.alarms);
 
   usePlatformSpecificKeybind("m", () => router.push("/"));
   usePlatformSpecificKeybind("a", () => router.push("/alarms"));

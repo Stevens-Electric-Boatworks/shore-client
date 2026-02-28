@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavButton } from "./ui/nav-button";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useSocketStore } from "@/store/useSocketStore";
 import useKeybind from "@/hooks/use-keybind";
+import { useStore } from "@/store";
 
 export const AlarmsTable = () => {
   const [selected, setSelected] = useState(0);
 
-  const { alarms } = useSocketStore();
+  const alarms = useStore((s) => s.alarms);
 
   const sorted = alarms.slice().sort((a, b) => {
     // First, sort by type: ERRORs before WARNINGs
@@ -23,9 +23,9 @@ export const AlarmsTable = () => {
   const acknowledgeAll = () => {
     sorted.forEach((alarm) => {
       if (!alarm.acknowledged) {
-        useSocketStore.setState((state) => ({
+        useStore.setState((state) => ({
           alarms: state.alarms.map((a) =>
-            a.id === alarm.id ? { ...a, acknowledged: true } : a
+            a.id === alarm.id ? { ...a, acknowledged: true } : a,
           ),
         }));
       }
@@ -35,9 +35,9 @@ export const AlarmsTable = () => {
   const acknowledgeSelected = () => {
     const selectedId = sorted[selected]?.id;
     if (!selectedId) return;
-    useSocketStore.setState((state) => ({
+    useStore.setState((state) => ({
       alarms: state.alarms.map((a) =>
-        a.id === selectedId ? { ...a, acknowledged: true } : a
+        a.id === selectedId ? { ...a, acknowledged: true } : a,
       ),
     }));
   };
@@ -135,9 +135,9 @@ export const AlarmsTable = () => {
         </NavButton>
         <button
           onClick={acknowledgeSelected}
-          className="p-2 min-w-[180px] border-2 
-            cursor-pointer flex justify-center bg-orange-400 text-white font-bold 
-            border-t-orange-300 border-l-orange-300 border-b-orange-500 
+          className="p-2 min-w-[180px] border-2
+            cursor-pointer flex justify-center bg-orange-400 text-white font-bold
+            border-t-orange-300 border-l-orange-300 border-b-orange-500
             border-r-orange-500 hover:bg-orange-500 disabled:hover:bg-orange-400 disabled:hover:cursor-auto"
           disabled={sorted[selected]?.acknowledged || sorted.length < 1}
         >
@@ -147,9 +147,9 @@ export const AlarmsTable = () => {
         </button>
         <button
           onClick={acknowledgeAll}
-          className="p-2 min-w-[220px] border-2 
-            cursor-pointer flex justify-center bg-orange-400 text-white font-bold 
-            border-t-orange-300 border-l-orange-300 border-b-orange-500 
+          className="p-2 min-w-[220px] border-2
+            cursor-pointer flex justify-center bg-orange-400 text-white font-bold
+            border-t-orange-300 border-l-orange-300 border-b-orange-500
             border-r-orange-500 hover:bg-orange-500 disabled:hover:bg-orange-400 disabled:hover:cursor-auto"
           disabled={sorted.every((e) => e.acknowledged)}
         >

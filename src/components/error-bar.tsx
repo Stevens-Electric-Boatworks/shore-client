@@ -1,12 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useError } from "./contexts/error-provider";
-import { useSocketStore } from "@/store/useSocketStore";
+import { useStore } from "@/store";
 
 export const ErrorBar = () => {
   const pathname = usePathname();
-  const { alarms } = useSocketStore();
+  const alarms = useStore((s) => s.alarms);
 
   // Don't show if on ALARMS page, since user will manage the alarms there
   if (pathname === "/alarms") return;
@@ -29,7 +28,7 @@ export const ErrorBar = () => {
 
   return (
     <div
-      className={`flex px-2 bg-gradient-to-b border-t-1 
+      className={`flex px-2 bg-gradient-to-b border-t-1
         ${
           error.type.toUpperCase() === "ERROR"
             ? "from-red-300 to-red-600 text-white"
@@ -45,9 +44,9 @@ export const ErrorBar = () => {
 
       <button
         onClick={() => {
-          useSocketStore.setState((state) => ({
+          useStore.setState((state) => ({
             alarms: state.alarms.map((a) =>
-              a.id === error.id ? { ...a, acknowledged: true } : a
+              a.id === error.id ? { ...a, acknowledged: true } : a,
             ),
           }));
         }}

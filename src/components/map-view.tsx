@@ -2,21 +2,21 @@
 
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
-import { ComponentType, useEffect, useRef, useState } from "react";
-import { useSocketStore } from "@/store/useSocketStore";
+import { useEffect, useRef, useState } from "react";
 import { Map as LeafletMap } from "leaflet";
+import { useStore } from "@/store";
 
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
-  { ssr: false }
+  { ssr: false },
 );
 const TileLayer = dynamic(
   () => import("react-leaflet").then((mod) => mod.TileLayer),
-  { ssr: false }
+  { ssr: false },
 );
 const Marker = dynamic(
   () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false }
+  { ssr: false },
 );
 
 let DefaultIcon;
@@ -39,7 +39,7 @@ if (typeof window !== "undefined") {
 }
 
 export const Map = () => {
-  const { data } = useSocketStore();
+  const data = useStore((s) => s.data);
   const mapRef = useRef<LeafletMap | null>(null);
 
   const [lat, setLat] = useState(0);

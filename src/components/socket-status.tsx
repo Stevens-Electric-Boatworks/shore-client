@@ -1,12 +1,11 @@
 "use client";
 
-import { useSocketStore } from "@/store/useSocketStore";
 import { useRef } from "react";
 import Cookies from "js-cookie";
+import { useStore } from "@/store";
 
 export const SocketStatus = () => {
-  const { ws, latencies, connected_clients, disconnect, connect } =
-    useSocketStore();
+  const { ws, latencies, connected_clients, disconnect, connect } = useStore();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -36,11 +35,12 @@ export const SocketStatus = () => {
                   if (ws?.url === val) return;
                   if (ws) {
                     disconnect();
-                    connect(val);
+                    useStore.setState({ url: val });
+                    connect();
                     Cookies.set("ws-url", val);
                     return;
                   }
-                  connect(val);
+                  connect();
                   Cookies.set("ws-url", val);
                   return;
                 }}

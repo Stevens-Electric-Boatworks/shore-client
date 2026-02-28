@@ -13,8 +13,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import { useSocket } from "./contexts/socket-provider";
-import { useSocketStore } from "@/store/useSocketStore";
+import { useStore } from "@/store";
 
 // Register ChartJS components
 ChartJS.register(
@@ -25,7 +24,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 
 interface LatencyDataPoint {
@@ -44,7 +43,7 @@ export default function LatencyChart({
   maxDataPoints = 50,
   showStats = true,
 }: LatencyChartProps) {
-  const { latencies } = useSocketStore();
+  const latencies = useStore((s) => s.latencies);
   const [dataPoints, setDataPoints] = useState<LatencyDataPoint[]>([]);
 
   // Add new latency data points when latency updates
@@ -57,11 +56,9 @@ export default function LatencyChart({
         const n = Math.min(latencies.length, maxDataPoints);
         // Assume latencies[0] is the newest; take the most recent n and reverse to oldest->newest
         const recent = latencies.slice(0, n).reverse();
-        const now = Date.now();
 
-        const initialPoints: LatencyDataPoint[] = recent.map((lat, idx) => {
+        const initialPoints: LatencyDataPoint[] = recent.map((lat) => {
           // space timestamps by 1s so labels appear in chronological order
-          const timestamp = now - (n - 1 - idx) * 1000;
           return {
             timestamp: lat.timestamp.getTime(),
             latency: lat.value,
@@ -97,7 +94,7 @@ export default function LatencyChart({
       dataPoints.length > 0
         ? Math.round(
             dataPoints.reduce((sum, dp) => sum + dp.latency, 0) /
-              dataPoints.length
+              dataPoints.length,
           )
         : 0,
     min:

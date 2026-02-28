@@ -9,17 +9,19 @@ import { ErrorBar } from "@/components/error-bar";
 import { ButtonsBar } from "@/components/buttons-bar";
 import { useEffect } from "react";
 import { useSocketStore } from "@/store/useSocketStore";
+import { useStore } from "@/store";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { connect, disconnect } = useSocketStore();
+  const { connect, disconnect } = useStore();
 
   useEffect(() => {
     const url = Cookies.get("ws-url") || "wss://shore.stevenseboat.org/api";
-    connect(url);
+    useStore.setState({ url });
+    connect();
     return () => disconnect();
   }, [connect, disconnect]);
 

@@ -28,8 +28,8 @@ export default function DiagnosticHomePage() {
         <NavButton onClick={() => router.push("/diag/alarm_history")}>
           ALARM HISTORY
         </NavButton>
-        <NavButton onClick={() => router.push("/diag/legacy")}>
-          LEGACY
+        <NavButton onClick={() => router.push("/diag/terminal")}>
+          TERMINAL
         </NavButton>
       </div>
     </div>

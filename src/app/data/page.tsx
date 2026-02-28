@@ -45,14 +45,14 @@ export default function DataPage() {
       }
 
       const res = await axios.get(
-        "https://shore.stevenseboat.org/api/download",
+        "https://shore.stevenseboat.org/api/data/download",
         {
           params: {
             from: fromDate.getTime(),
             to: toDate.getTime(),
           },
           responseType: "blob",
-        }
+        },
       );
 
       let filename = "data.csv";

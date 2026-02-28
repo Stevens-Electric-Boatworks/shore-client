@@ -2,14 +2,13 @@
 
 import { Map } from "@/components/map-view";
 import { Gauge } from "@/components/ui/gauge";
-import { HeadingIndicator } from "@/components/ui/heading-indicator";
 import { LinearGauge } from "@/components/ui/linear-gauge";
-import { useSocketStore } from "@/store/useSocketStore";
+import { useStore } from "@/store";
 
 export default function Home() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-  const { data } = useSocketStore();
+  const data = useStore((s) => s.data);
 
   // useEffect(() => {
   //   if (!socket) return;
