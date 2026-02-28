@@ -3,15 +3,17 @@ import { StoreState } from "@/store";
 import { StateCreator } from "zustand";
 
 export type Alarm = {
-  timestamp: Date;
   id: number;
-  type: "ERROR" | "WARNING";
+  type: "ERROR" | "WARNING" | "UNKNOWN";
   message: string;
-  acknowledged: boolean;
+  raisedAt: Date;
+  acknowledgedAt?: Date;
+  resolvedAt?: Date;
 };
 
 export type AlarmsSlice = {
   alarms: Alarm[];
+  acknowledgeAlarm: (id: number) => void;
 };
 
 export const registerAlarmsSlice = (
@@ -22,13 +24,29 @@ export const registerAlarmsSlice = (
   get: () => StoreState,
 ) => {
   dispatcher.on("alarm", (_ws, msg) => {
-    const alarm: Alarm = {
-      ...(msg.payload as Alarm),
-      timestamp: new Date((msg.payload as { timestamp: string }).timestamp),
-    };
-    set((state) => ({
-      alarms: [alarm, ...state.alarms].slice(-500),
-    }));
+    if (msg.action == "set") {
+      const alarm: Alarm = {
+        ...(msg.payload as Alarm),
+        raisedAt: new Date((msg.payload as { raisedAt: string }).raisedAt),
+      };
+      set((state) => ({
+        alarms: [alarm, ...state.alarms].slice(-500),
+      }));
+    } else if (msg.action == "resolve") {
+    } else if (msg.action == "acknowledge") {
+      const id = msg.id as number;
+      const now = new Date();
+      set((state) => {
+        const alarms = Array.from(state.alarms);
+        alarms
+          .filter((e) => e.id == id)
+          .filter((e) => !e.acknowledgedAt || !e.resolvedAt)
+          .forEach((e) => {
+            e.acknowledgedAt = now;
+          });
+        return { alarms };
+      });
+    }
   });
 };
 
@@ -39,4 +57,15 @@ export const createAlarmsSlice: StateCreator<
   AlarmsSlice
 > = (set, get): AlarmsSlice => ({
   alarms: [],
+  acknowledgeAlarm: (id: number) => {
+    const ws = get().ws;
+    if (!ws) return;
+    ws.send(
+      JSON.stringify({
+        type: "alarm",
+        action: "acknowledge",
+        id,
+      }),
+    );
+  },
 });

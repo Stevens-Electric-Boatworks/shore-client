@@ -21,7 +21,7 @@ export const ButtonsBar = () => {
         className={`p-2 border-2 cursor-pointer
         ${
           alarms.filter(
-            (e) => e.type.toUpperCase() === "ERROR" && !e.acknowledged,
+            (e) => e.type.toUpperCase() === "ERROR" && !e.acknowledgedAt,
           ).length >= 1
             ? "bg-red-500 text-white font-bold border-t-red-400 border-l-red-400 border-b-red-700 border-r-red-700 hover:bg-red-700 blink-slow"
             : "bg-blue-600 text-white font-bold border-t-blue-400 border-l-blue-400 border-b-blue-700 border-r-blue-700 hover:bg-blue-700"

@@ -10,6 +10,7 @@ export const AlarmsTable = () => {
   const [selected, setSelected] = useState(0);
 
   const alarms = useStore((s) => s.alarms);
+  const acknowledge = useStore((s) => s.acknowledgeAlarm);
 
   const sorted = alarms.slice().sort((a, b) => {
     // First, sort by type: ERRORs before WARNINGs
@@ -17,29 +18,21 @@ export const AlarmsTable = () => {
       return a.type.toUpperCase() === "ERROR" ? -1 : 1;
     }
     // Then, sort by timestamp: newest first
-    return b.timestamp.getTime() - a.timestamp.getTime();
+    return b.raisedAt.getTime() - a.raisedAt.getTime();
   });
 
   const acknowledgeAll = () => {
-    sorted.forEach((alarm) => {
-      if (!alarm.acknowledged) {
-        useStore.setState((state) => ({
-          alarms: state.alarms.map((a) =>
-            a.id === alarm.id ? { ...a, acknowledged: true } : a,
-          ),
-        }));
-      }
-    });
+    sorted
+      .filter((e) => !e.acknowledgedAt)
+      .forEach((alarm) => {
+        acknowledge(alarm.id);
+      });
   };
 
   const acknowledgeSelected = () => {
     const selectedId = sorted[selected]?.id;
     if (!selectedId) return;
-    useStore.setState((state) => ({
-      alarms: state.alarms.map((a) =>
-        a.id === selectedId ? { ...a, acknowledged: true } : a,
-      ),
-    }));
+    acknowledge(selectedId);
   };
 
   const selectionDown = () => {
@@ -84,12 +77,12 @@ export const AlarmsTable = () => {
                   }
                   onClick={() => setSelected(idx)}
                 >
-                  <td>{e.timestamp.toLocaleString()}</td>
+                  <td>{e.raisedAt.toLocaleString()}</td>
                   <td>
                     {e.type.toUpperCase() === "ERROR" && (
                       <div
                         className={`text-sm text-center bg-red-500 px-2 mx-2 text-white border border-red-800 ${
-                          e.acknowledged ? "" : "blink-slow"
+                          e.acknowledgedAt ? "" : "blink-slow"
                         }`}
                       >
                         ERR
@@ -98,7 +91,7 @@ export const AlarmsTable = () => {
                     {e.type.toUpperCase() === "WARNING" && (
                       <div
                         className={`text-sm text-center bg-yellow-500 px-2 mx-2 text-white border border-red-800 ${
-                          e.acknowledged ? "" : "blink-slow"
+                          e.acknowledgedAt ? "" : "blink-slow"
                         }`}
                       >
                         WARN
@@ -139,9 +132,9 @@ export const AlarmsTable = () => {
             cursor-pointer flex justify-center bg-orange-400 text-white font-bold
             border-t-orange-300 border-l-orange-300 border-b-orange-500
             border-r-orange-500 hover:bg-orange-500 disabled:hover:bg-orange-400 disabled:hover:cursor-auto"
-          disabled={sorted[selected]?.acknowledged || sorted.length < 1}
+          disabled={!!sorted[selected]?.acknowledgedAt || sorted.length < 1}
         >
-          {sorted[selected]?.acknowledged || sorted.length < 1
+          {sorted[selected]?.acknowledgedAt || sorted.length < 1
             ? "ACKNOWLEDGED"
             : "ACKNOWLEDGE"}
         </button>
@@ -151,15 +144,15 @@ export const AlarmsTable = () => {
             cursor-pointer flex justify-center bg-orange-400 text-white font-bold
             border-t-orange-300 border-l-orange-300 border-b-orange-500
             border-r-orange-500 hover:bg-orange-500 disabled:hover:bg-orange-400 disabled:hover:cursor-auto"
-          disabled={sorted.every((e) => e.acknowledged)}
+          disabled={sorted.every((e) => e.acknowledgedAt)}
         >
-          {sorted.every((e) => e.acknowledged)
+          {sorted.every((e) => e.acknowledgedAt)
             ? "ALL ACKNOWLEDGED"
             : "ACKNOWLEDGE ALL"}
         </button>
         <div className="flex  gap-6 items-center bg-white border px-2">
           <p className="font-bold">
-            {alarms.filter((e) => !e.acknowledged).length} Not Acknowledged
+            {alarms.filter((e) => !e.acknowledgedAt).length} Not Acknowledged
           </p>
           <p>{alarms.length} Total</p>
         </div>
