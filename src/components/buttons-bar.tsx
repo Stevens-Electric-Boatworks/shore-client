@@ -4,14 +4,29 @@ import { useRouter } from "next/navigation";
 import { NavButton } from "./ui/nav-button";
 import usePlatformSpecificKeybind from "@/hooks/use-platform-keybind";
 import { useStore } from "@/store";
+import { useEffect } from "react";
+import { useLoopingSound } from "@/hooks/use-looping-sound";
 
 export const ButtonsBar = () => {
   const router = useRouter();
   const alarms = useStore((s) => s.alarms);
 
+  const { play, stop } = useLoopingSound("/chime-honda.ogg");
+
   usePlatformSpecificKeybind("m", () => router.push("/"));
   usePlatformSpecificKeybind("a", () => router.push("/alarms"));
   usePlatformSpecificKeybind("d", () => router.push("/diag"));
+
+  useEffect(() => {
+    if (
+      alarms.filter((e) => e.type === "ERROR").filter((e) => !e.acknowledgedAt)
+        .length > 0
+    ) {
+      play();
+    } else {
+      stop();
+    }
+  }, [alarms, play, stop]);
 
   return (
     <div className="flex gap-2 p-2 bg-gradient-to-b from-zinc-100 to-zinc-300 border-t relative items-center">
