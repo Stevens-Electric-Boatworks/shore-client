@@ -23,6 +23,11 @@ export function useLoopingSound(src: string, volume = 1) {
     audioRef.current = audio;
   }, [src, volume]);
 
+  const setVolume = useCallback((volume: number) => {
+    if (!audioRef.current) return; // not playing
+    audioRef.current.volume = volume;
+  }, []);
+
   const stop = useCallback(() => {
     if (!audioRef.current) return;
     audioRef.current.pause();
@@ -30,5 +35,5 @@ export function useLoopingSound(src: string, volume = 1) {
     audioRef.current = null;
   }, []);
 
-  return { play, stop };
+  return { play, stop, setVolume };
 }

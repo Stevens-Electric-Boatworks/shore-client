@@ -2,41 +2,50 @@
 
 import "./globals.css";
 import "ldrs/react/LineSpinner.css";
-import Cookies from "js-cookie";
-import { ErrorProvider } from "@/components/contexts/error-provider";
 import { StatusBar } from "@/components/status-bar";
 import { ErrorBar } from "@/components/error-bar";
 import { ButtonsBar } from "@/components/buttons-bar";
-import { useEffect } from "react";
+
+import { useSettingsStore } from "@/settings-store";
 import { useStore } from "@/store";
+import { useEffect } from "react";
+import { ModalProvider } from "@/components/contexts/modal-provider";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { connect, disconnect } = useStore();
+  const { connect, disconnect, ws } = useStore();
+  const { loadSettings, loaded } = useSettingsStore();
+  const socketUrl = useSettingsStore((s) => s.settings.get("ws.url") as string);
 
   useEffect(() => {
-    const url = Cookies.get("ws-url") || "wss://shore.stevenseboat.org/api";
-    useStore.setState({ url });
+    loadSettings();
+  }, [loadSettings]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    if (ws) return;
+
+    useStore.setState({ url: socketUrl });
     connect();
+
     return () => disconnect();
-  }, [connect, disconnect]);
+  }, [socketUrl]);
 
   return (
     <html lang="en">
-      <ErrorProvider>
-        <body className={`antialiased`}>
-          <div className="flex flex-col h-screen w-screen">
-            <StatusBar />
-            <div className="absolute h-full w-full -z-50 pinstripe" />
-            <div className="flex flex-col flex-1 p-2 min-h-0">{children}</div>
-            <ErrorBar />
-            <ButtonsBar />
-          </div>
-        </body>
-      </ErrorProvider>
+      <body className={`antialiased`}>
+        <div className="flex flex-col h-screen w-screen">
+          <ModalProvider />
+          <StatusBar />
+          <div className="absolute h-full w-full -z-50 pinstripe" />
+          <div className="flex flex-col flex-1 p-2 min-h-0">{children}</div>
+          <ErrorBar />
+          <ButtonsBar />
+        </div>
+      </body>
     </html>
   );
 }

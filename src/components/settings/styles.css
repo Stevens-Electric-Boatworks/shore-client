@@ -1,0 +1,12 @@
+select {
+  background-color: lightgray;
+  border: 1px black;
+}
+
+select:hover {
+  cursor: pointer;
+}
+
+input:hover {
+  cursor: pointer;
+}

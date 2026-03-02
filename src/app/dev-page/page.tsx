@@ -1,5 +1,6 @@
 "use client";
 
+import { SettingsModal } from "@/components/modals/settings-modal";
 import { Gauge } from "@/components/ui/gauge";
 import { HeadingIndicator } from "@/components/ui/heading-indicator";
 import { LinearGauge } from "@/components/ui/linear-gauge";

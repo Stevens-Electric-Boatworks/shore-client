@@ -6,27 +6,45 @@ import usePlatformSpecificKeybind from "@/hooks/use-platform-keybind";
 import { useStore } from "@/store";
 import { useEffect } from "react";
 import { useLoopingSound } from "@/hooks/use-looping-sound";
+import { useModal } from "@/hooks/use-modal";
+import { useSettingsStore } from "@/settings-store";
 
 export const ButtonsBar = () => {
   const router = useRouter();
   const alarms = useStore((s) => s.alarms);
 
-  const { play, stop } = useLoopingSound("/chime-honda.ogg");
+  const audioEnabled = useSettingsStore(
+    (s) => s.settings.get("audio.enabled") as boolean,
+  );
+  const audioVolume = useSettingsStore(
+    (s) => s.settings.get("audio.volume") as number,
+  );
+
+  const { play, stop, setVolume } = useLoopingSound("/chime-honda.ogg");
+
+  const { onOpen } = useModal();
 
   usePlatformSpecificKeybind("m", () => router.push("/"));
   usePlatformSpecificKeybind("a", () => router.push("/alarms"));
   usePlatformSpecificKeybind("d", () => router.push("/diag"));
 
   useEffect(() => {
+    if (!audioEnabled) {
+      stop();
+      return;
+    }
+
     if (
       alarms.filter((e) => e.type === "ERROR").filter((e) => !e.acknowledgedAt)
         .length > 0
     ) {
+      setVolume(Math.max(0, Math.min(1, audioVolume / 100.0)));
+
       play();
     } else {
       stop();
     }
-  }, [alarms, play, stop]);
+  }, [alarms, play, stop, audioEnabled, audioVolume, setVolume]);
 
   return (
     <div className="flex gap-2 p-2 bg-gradient-to-b from-zinc-100 to-zinc-300 border-t relative items-center">
@@ -48,7 +66,7 @@ export const ButtonsBar = () => {
       <NavButton onClick={() => router.push("/diag")}>DIAGNOSTIC</NavButton>
       <NavButton onClick={() => router.push("/data")}>DATA</NavButton>
       <div className="ml-auto flex gap-2">
-        <NavButton>SETTINGS</NavButton>
+        <NavButton onClick={() => onOpen("settings")}>SETTINGS</NavButton>
         <NavButton>HELP</NavButton>
         <NavButton onClick={() => router.push("/dev-page")}>DEV-PAGE</NavButton>
       </div>
