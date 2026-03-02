@@ -32,7 +32,7 @@ export default function RootLayout({
     connect();
 
     return () => disconnect();
-  }, [socketUrl]);
+  }, [socketUrl, loaded]);
 
   return (
     <html lang="en">
