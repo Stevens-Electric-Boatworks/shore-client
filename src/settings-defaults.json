@@ -1,5 +1,5 @@
 {
-  "ws.url": "ws://shore.stevenseboat.org/api",
+  "ws.url": "wss://shore.stevenseboat.org/api",
   "audio.enabled": false,
   "audio.alarms.tone": "honda",
   "audio.volume": 75
