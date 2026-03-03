@@ -29,6 +29,7 @@ export const useSettingsStore = create<SettingsStoreState>()((...args) => {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (!key) continue;
+        if (key.startsWith("jsdos")) continue;
 
         const value = localStorage.getItem(key);
         newSettings.set(key, value ? JSON.parse(value) : null);

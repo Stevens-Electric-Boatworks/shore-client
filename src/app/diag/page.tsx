@@ -13,6 +13,7 @@ export default function DiagnosticHomePage() {
   useKeybind("m", () => router.push("/diag/motor"));
   useKeybind("a", () => router.push("/diag/alarms_history"));
   useKeybind("L", () => router.push("/diag/legacy"));
+  useKeybind("d", () => router.push("/doom"));
 
   return (
     <div className="flex flex-col h-full">
@@ -30,6 +31,9 @@ export default function DiagnosticHomePage() {
         </NavButton>
         <NavButton onClick={() => router.push("/diag/terminal")}>
           TERMINAL
+        </NavButton>
+        <NavButton onClick={() => router.push("/relax")}>
+          RELAXATION VAULT
         </NavButton>
       </div>
     </div>

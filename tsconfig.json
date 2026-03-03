@@ -22,6 +22,7 @@
       "@/*": ["./src/*"],
       "@assets/*": ["./assets/*"],
     },
+    "typeRoots": ["./node_modules/@types", "./types"],
   },
   "include": [
     "next-env.d.ts",

@@ -36,6 +36,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head></head>
       <body className={`antialiased`}>
         <div className="flex flex-col h-screen w-screen">
           <ModalProvider />
