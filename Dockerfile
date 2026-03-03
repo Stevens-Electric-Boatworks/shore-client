@@ -2,7 +2,7 @@ ARG NEXT_PUBLIC_SOCKET_URL
 ARG NEXT_PUBLIC_BUILD_TIME
 ARG NEXT_PUBLIC_COMMIT_SHA
 
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
