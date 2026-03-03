@@ -6,8 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint",
-    "postinstall": "cp -r node_modules/js-dos/dist public/js-dos"
+    "lint": "eslint"
   },
   "dependencies": {
     "@xterm/addon-fit": "^0.11.0",
