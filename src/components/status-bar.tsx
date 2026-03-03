@@ -63,7 +63,7 @@ export const StatusBar = () => {
   const can_connection_state = () => {
     if (isConnecting || isFailed) return "CAN BUS UNAVAIL";
     if (can_bus_state == 0) return "CAN BUS OFFLINE";
-    if (can_bus_state == 1) return "CAN BUS ON";
+    if (can_bus_state == 1) return "CAN BUS OK";
     if (can_bus_state == 2) return "CAN BUS TEST";
 
     return "CAN BUS UNAVAIL";
