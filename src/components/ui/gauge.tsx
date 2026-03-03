@@ -12,6 +12,7 @@ export const Gauge = ({
   danger,
   label,
   suffix,
+  valueString,
 }: {
   // value?: number; #
   data?: {
@@ -25,6 +26,7 @@ export const Gauge = ({
   danger?: number;
   label?: string;
   suffix?: string;
+  valueString?: string;
 }) => {
   const isDanger =
     danger !== undefined && data?.value !== undefined && data.value >= danger;
@@ -60,7 +62,7 @@ export const Gauge = ({
           } as React.CSSProperties
         }
       >
-        {displayValue(data?.value)}
+        {valueString ? valueString : displayValue(data?.value)}
         {suffix}
       </div>
       <p

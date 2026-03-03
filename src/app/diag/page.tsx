@@ -32,6 +32,9 @@ export default function DiagnosticHomePage() {
         <NavButton onClick={() => router.push("/diag/terminal")}>
           TERMINAL
         </NavButton>
+        <NavButton onClick={() => router.push("/diag/system")}>
+          SYSTEM
+        </NavButton>
         <NavButton onClick={() => router.push("/relax")}>
           RELAXATION VAULT
         </NavButton>
