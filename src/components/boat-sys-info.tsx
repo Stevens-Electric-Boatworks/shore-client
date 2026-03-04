@@ -31,13 +31,13 @@ function formatBytesObj(bytes: number, decimals = 2): FormattedBytes {
   };
 }
 
-export const ServerSystemInformation = () => {
+export const BoatSystemInformation = () => {
   const data = useStore((s) => s.data);
 
   return (
     <div className="border bg-white">
       <div className="px-2 border-b flex items-center bg-gradient-to-b from-zinc-100 to-zinc-300">
-        <p className="font-bold">Server</p>
+        <p className="font-bold">Boat</p>
       </div>
       <div className="p-2 gap-2 flex">
         <div className="flex-1">
@@ -81,7 +81,7 @@ export const ServerSystemInformation = () => {
             </tbody>
           </table>
         </div>
-        <div className="flex-1 flex flex-col gap-2">
+        <div className="flex-1">
           <table className="w-full">
             <tbody className="[&>tr:nth-child(even)]:bg-gray-100 [&>tr>td:first-child]:font-bold">
               <tr>
@@ -117,28 +117,28 @@ export const ServerSystemInformation = () => {
           <table className="w-full">
             <tbody className="[&>tr:nth-child(even)]:bg-gray-100 [&>tr>td:first-child]:font-bold">
               <tr>
-                <td>Total Disk Space</td>
-                <td>{formatBytes(data.get("server.disk.total")?.value)}</td>
+                <td>Total Memory</td>
+                <td>{formatBytes(data.get("server.memory.total")?.value)}</td>
               </tr>
               <tr>
-                <td>Disk Used</td>
-                <td>{formatBytes(data.get("server.disk.used")?.value)}</td>
+                <td>Active Memory</td>
+                <td>{formatBytes(data.get("server.memory.active")?.value)}</td>
               </tr>
               <tr>
-                <td>Disk Available</td>
+                <td>Available Memory</td>
                 <td>
                   {formatBytes(
-                    data.get("server.disk.total")?.value -
-                      data.get("server.disk.used")?.value,
+                    data.get("server.memory.total")?.value -
+                      data.get("server.memory.active")?.value,
                   )}
                 </td>
               </tr>
               <tr>
-                <td>Disk Utilization</td>
+                <td>Memory Utilization</td>
                 <td>
                   {(
-                    (data.get("server.disk.used")?.value /
-                      data.get("server.disk.total")?.value) *
+                    (data.get("server.memory.active")?.value /
+                      data.get("server.memory.total")?.value) *
                     100.0
                   ).toFixed(1)}
                   %
@@ -167,18 +167,6 @@ export const ServerSystemInformation = () => {
             high={data.get("server.memory.total")?.value}
             valueString={formatBytesObj(
               data.get("server.memory.active")?.value,
-            ).value.toFixed(1)}
-            staleDelay={2500}
-          />
-          <Gauge
-            label="DISK USE"
-            size={150}
-            data={data.get("server.disk.used")}
-            suffix={formatBytesObj(data.get("server.disk.used")?.value).unit}
-            danger={data.get("server.disk.total")?.value * 0.85}
-            high={data.get("server.disk.total")?.value}
-            valueString={formatBytesObj(
-              data.get("server.disk.used")?.value,
             ).value.toFixed(1)}
             staleDelay={2500}
           />

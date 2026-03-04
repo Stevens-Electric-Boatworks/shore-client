@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import "./gauge.css";
 
 export const Gauge = ({
@@ -13,6 +14,7 @@ export const Gauge = ({
   label,
   suffix,
   valueString,
+  staleDelay = 1500,
 }: {
   // value?: number; #
   data?: {
@@ -27,17 +29,46 @@ export const Gauge = ({
   label?: string;
   suffix?: string;
   valueString?: string;
+  staleDelay?: number;
 }) => {
   const isDanger =
     danger !== undefined && data?.value !== undefined && data.value >= danger;
   const isWarn =
     warn !== undefined && data?.value !== undefined && data.value >= warn;
 
+  const [isStale, setIsStale] = useState(false);
+
+  useEffect(() => {
+    if (!data) {
+      setIsStale(true);
+      return;
+    }
+
+    setIsStale(false);
+
+    const timeSinceUpdate = Date.now() - new Date(data.timestamp).getTime();
+    const timeUntilStale = staleDelay - timeSinceUpdate;
+
+    if (timeUntilStale <= 0) {
+      setIsStale(true);
+      return;
+    }
+
+    const timeout = setTimeout(() => setIsStale(true), timeUntilStale);
+    return () => clearTimeout(timeout);
+  }, [data, staleDelay]);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const displayValue = (data: any) => {
     if (typeof data === "number") return data.toFixed();
     if (!data) return "";
     return "" + data;
+  };
+
+  const scaleFontSize = (baseFontSize: number, text: string, maxChars = 4) => {
+    const len = text.length;
+    if (len <= maxChars) return baseFontSize;
+    return Math.max(baseFontSize * 0.5, baseFontSize * (maxChars / len));
   };
 
   return (
@@ -62,8 +93,29 @@ export const Gauge = ({
           } as React.CSSProperties
         }
       >
-        {valueString ? valueString : displayValue(data?.value)}
-        {suffix}
+        <div className="flex gap-1 w-full justify-center">
+          <span
+            style={{
+              fontSize: scaleFontSize(
+                size <= 100 ? 16 : 36,
+                valueString ?? displayValue(data?.value),
+              ),
+            }}
+          >
+            {valueString ? valueString : displayValue(data?.value)}
+          </span>
+          <span
+            style={{
+              fontSize: scaleFontSize(
+                size <= 100 ? 16 : 24,
+                (valueString ?? displayValue(data?.value)) + (suffix ?? ""),
+                6, // combined value+suffix can be a bit longer before shrinking
+              ),
+            }}
+          >
+            {suffix}
+          </span>
+        </div>
       </div>
       <p
         className={`absolute text-center`}
@@ -76,9 +128,7 @@ export const Gauge = ({
       >
         {label}
       </p>
-      {(data === undefined ||
-        data.value === undefined ||
-        new Date().getTime() - data.timestamp.getTime() > 1500) && (
+      {isStale && (
         <svg
           style={{
             position: "absolute",
