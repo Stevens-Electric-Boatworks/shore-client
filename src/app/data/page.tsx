@@ -1,4 +1,5 @@
 "use client";
+import { SessionList } from "@/components/session-list";
 import { NavButton } from "@/components/ui/nav-button";
 import axios, { isAxiosError } from "axios";
 import { LineSpinner } from "ldrs/react";
@@ -84,35 +85,47 @@ export default function DataPage() {
   return (
     <div className="flex flex-col gap-2">
       <p className="text-2xl font-bold">Data Download</p>
-      <div className="border bg-white p-2 space-y-4">
-        <div>
-          <p>From:</p>
-          <input
-            type="datetime-local"
-            id="from-time"
-            ref={fromTimeRef}
-            className="border px-2"
-          />
-          <p>To:</p>
-          <input
-            type="datetime-local"
-            id="to-time"
-            ref={toTimeRef}
-            className="border px-2"
-          />
-        </div>
-        <div className="flex gap-4 items-center">
-          <NavButton disabled={isLoading} onClick={download}>
-            DOWNLOAD
-          </NavButton>
-          {isLoading && <LineSpinner stroke={2} speed={1} size={24} />}
-        </div>
-        {error && (
-          <div className="border p-2 text-red-800 bg-rose-100">
-            <p className="font-bold">Failed to download data:</p>
-            <p>{error}</p>
+      <div className="flex gap-2 h-full">
+        <div className="border bg-white p-2 space-y-4 flex-1">
+          <div>
+            <p>From:</p>
+            <input
+              type="datetime-local"
+              id="from-time"
+              ref={fromTimeRef}
+              className="border px-2"
+            />
+            <p>To:</p>
+            <input
+              type="datetime-local"
+              id="to-time"
+              ref={toTimeRef}
+              className="border px-2"
+            />
           </div>
-        )}
+          <div className="flex gap-4 items-center">
+            <NavButton disabled={isLoading} onClick={download}>
+              DOWNLOAD
+            </NavButton>
+            {isLoading && <LineSpinner stroke={2} speed={1} size={24} />}
+          </div>
+          {error && (
+            <div className="border p-2 text-red-800 bg-rose-100">
+              <p className="font-bold">Failed to download data:</p>
+              <p>{error}</p>
+            </div>
+          )}
+        </div>
+        <div className="flex-1 ">
+          <div className="p-2 flex items-center">
+            <p className="font-bold">Session List</p>
+            <div className="ml-auto flex gap-2 items-center">
+              <LineSpinner size={20} stroke={1.5} color="#333" />
+              <NavButton size="small">REFRESH</NavButton>
+            </div>
+          </div>
+          <SessionList />
+        </div>
       </div>
     </div>
   );
