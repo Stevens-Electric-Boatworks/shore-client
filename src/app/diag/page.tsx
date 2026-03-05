@@ -26,7 +26,7 @@ export default function DiagnosticHomePage() {
           SOCKET
         </NavButton>
         <NavButton onClick={() => router.push("/diag/motor")}>MOTOR</NavButton>
-        <NavButton onClick={() => router.push("/diag/alarm_history")}>
+        <NavButton onClick={() => router.push("/diag/alarms_history")}>
           ALARM HISTORY
         </NavButton>
         <NavButton onClick={() => router.push("/diag/terminal")}>

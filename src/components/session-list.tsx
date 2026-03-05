@@ -35,7 +35,7 @@ export const SessionList = () => {
       setData((s) => {
         const newData: SessionEntry[] = res.data.data.map(
           (e: SessionEntry) => ({
-            id: e.id,
+            ...e,
             startTime: new Date(e.startTime),
             endTime: e.endTime ? new Date(e.endTime) : undefined,
           }),
@@ -88,13 +88,17 @@ export const SessionList = () => {
             ))}
           </tbody>
         </table>
-        {pagination?.hasNextPage && (
+        {pagination?.hasNextPage ? (
           <button
             className="w-full text-center text-sm font-bold py-2 hover:cursor-pointer hover:bg-zinc-100 underline text-blue-600 hover:text-blue-800"
             onClick={() => retrieveData(pagination?.nextCursor)}
           >
             Load more results
           </button>
+        ) : (
+          <div className="w-full text-center text-sm font-bold py-2">
+            End of list
+          </div>
         )}
       </div>
     </div>
