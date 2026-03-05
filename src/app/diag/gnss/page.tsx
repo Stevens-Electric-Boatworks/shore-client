@@ -1,4 +1,3 @@
-import { GNSSInfo } from "@/components/gnss-info";
 import { GNSSStatus } from "@/components/gnss-status";
 import { GNSSVehicles } from "@/components/gnss-vehicles";
 
