@@ -1,6 +1,56 @@
 "use client";
 
+import { DataValue } from "@/slices/dataSlice";
+import { useStore } from "@/store";
+
+const OperationMode = ({ data }: { data?: DataValue }) => {
+  if (data) {
+    if (data.value === "A")
+      return (
+        <span className="text-sm border px-3 text-green-800 bg-green-200">
+          AUTO
+        </span>
+      );
+    if (data.value === "M")
+      return (
+        <span className="text-sm border px-3 text-yellow-800 bg-yellow-200">
+          MANUAL
+        </span>
+      );
+  }
+
+  return (
+    <span className="text-sm border px-3 text-zinc-700 bg-zinc-200">???</span>
+  );
+};
+
+const Mode = ({ data }: { data?: DataValue }) => {
+  if (data) {
+    if (data.value === 1)
+      <span className="text-sm border px-3 text-red-800 bg-red-200">
+        NO FIX
+      </span>;
+    if (data.value === 2)
+      return (
+        <span className="text-sm border px-3 text-blue-800 bg-blue-200">
+          2D FIX
+        </span>
+      );
+    if (data.value === 3)
+      return (
+        <span className="text-sm border px-3 text-green-800 bg-green-200">
+          3D FIX
+        </span>
+      );
+  }
+  return (
+    <span className="text-sm border px-3 text-zinc-700 bg-zinc-200">???</span>
+  );
+};
+
 export const GNSSStatus = () => {
+  const data = useStore((s) => s.data);
+
   return (
     <div className="border bg-white flex-1">
       <div className="border-b bg-linear-to-b from-zinc-100 to-zinc-300 px-2">
@@ -15,31 +65,39 @@ export const GNSSStatus = () => {
             </tr>
             <tr>
               <td>Latitude</td>
-              <td></td>
+              <td>{data.get("lat")?.value}</td>
             </tr>
             <tr>
               <td>Longitude</td>
-              <td></td>
+              <td>{data.get("long")?.value}</td>
             </tr>
             <tr>
               <td>Alt</td>
-              <td>10</td>
+              <td></td>
             </tr>
             <tr>
               <td>Speed</td>
-              <td>10</td>
+              <td>{data.get("speed")?.value}</td>
             </tr>
             <tr>
               <td>Track</td>
-              <td>10</td>
+              <td></td>
             </tr>
             <tr>
               <td>Climb</td>
-              <td>10</td>
+              <td></td>
             </tr>
             <tr>
               <td>Status</td>
-              <td>10</td>
+              <td>
+                <Mode data={data.get("sat_mode.mode")} />
+              </td>
+            </tr>
+            <tr>
+              <td>Operation Mode</td>
+              <td>
+                <OperationMode data={data.get("sat_mode.op_mode")} />
+              </td>
             </tr>
           </tbody>
         </table>
