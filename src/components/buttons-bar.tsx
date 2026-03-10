@@ -48,7 +48,9 @@ export const ButtonsBar = () => {
 
   return (
     <div className="flex gap-2 p-2 bg-gradient-to-b from-zinc-100 to-zinc-300 border-t relative items-center">
-      <NavButton onClick={() => router.push("/")}>MAIN</NavButton>
+      <NavButton onClick={() => router.push("/")}>
+        <u>M</u>AIN
+      </NavButton>
       <button
         onClick={() => router.push("/alarms")}
         className={`p-2 border-2 cursor-pointer
@@ -61,9 +63,11 @@ export const ButtonsBar = () => {
         }
         `}
       >
-        ACTIVE ALARMS
+        <u>A</u>CTIVE ALARMS
       </button>
-      <NavButton onClick={() => router.push("/diag")}>DIAGNOSTIC</NavButton>
+      <NavButton onClick={() => router.push("/diag")}>
+        <u>D</u>IAGNOSTIC
+      </NavButton>
       <NavButton onClick={() => router.push("/data")}>DATA</NavButton>
       <div className="ml-auto flex gap-2">
         <NavButton onClick={() => onOpen("settings")}>SETTINGS</NavButton>

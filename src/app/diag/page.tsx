@@ -12,31 +12,37 @@ export default function DiagnosticHomePage() {
   useKeybind("s", () => router.push("/diag/socket"));
   useKeybind("m", () => router.push("/diag/motor"));
   useKeybind("a", () => router.push("/diag/alarms_history"));
-  useKeybind("L", () => router.push("/diag/legacy"));
-  useKeybind("d", () => router.push("/doom"));
+  useKeybind("r", () => router.push("/relax"));
+  useKeybind("y", () => router.push("/diag/system"));
 
   return (
     <div className="flex flex-col h-full">
       <title>Select Diagnostic Module</title>
       <p className="text-xl font-bold mb-4">Select Diagnostic Module</p>
       <div className="grid grid-cols-3 grid-rows-5 h-full gap-2">
-        <NavButton onClick={() => router.push("/diag/logs")}>LOGS</NavButton>
-        <NavButton onClick={() => router.push("/diag/gnss")}>GNSS</NavButton>
-        <NavButton onClick={() => router.push("/diag/socket")}>
-          SOCKET
+        <NavButton onClick={() => router.push("/diag/logs")}>
+          <u>L</u>OGS
         </NavButton>
-        <NavButton onClick={() => router.push("/diag/motor")}>MOTOR</NavButton>
+        <NavButton onClick={() => router.push("/diag/gnss")}>
+          <u>G</u>NSS
+        </NavButton>
+        <NavButton onClick={() => router.push("/diag/socket")}>
+          <u>S</u>OCKET
+        </NavButton>
+        <NavButton onClick={() => router.push("/diag/motor")}>
+          <u>M</u>OTOR
+        </NavButton>
         <NavButton onClick={() => router.push("/diag/alarms_history")}>
-          ALARM HISTORY
+          <u>A</u>LARM HISTORY
         </NavButton>
         <NavButton onClick={() => router.push("/diag/terminal")}>
           TERMINAL
         </NavButton>
         <NavButton onClick={() => router.push("/diag/system")}>
-          SYSTEM
+          S<u>Y</u>STEM
         </NavButton>
         <NavButton onClick={() => router.push("/relax")}>
-          RELAXATION VAULT
+          <u>R</u>ELAXATION VAULT
         </NavButton>
       </div>
     </div>
