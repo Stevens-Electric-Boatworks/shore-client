@@ -7,44 +7,50 @@ const OperationMode = ({ data }: { data?: DataValue }) => {
   if (data) {
     if (data.value === "A")
       return (
-        <span className="text-sm border px-3 text-green-800 bg-green-200">
+        <span className="text-sm border px-3 bg-linear-to-b from-lime-200 to-lime-400">
           AUTO
         </span>
       );
     if (data.value === "M")
       return (
-        <span className="text-sm border px-3 text-yellow-800 bg-yellow-200">
+        <span className="text-sm border px-3 bg-linear-to-b from-yellow-100 to-yellow-300">
           MANUAL
         </span>
       );
   }
 
   return (
-    <span className="text-sm border px-3 text-zinc-700 bg-zinc-200">???</span>
+    <span className="text-sm border px-3 bg-linear-to-b from-zinc-100 to-zinc-300">
+      ???
+    </span>
   );
 };
 
 const Mode = ({ data }: { data?: DataValue }) => {
   if (data) {
     if (data.value === 1)
-      <span className="text-sm border px-3 text-red-800 bg-red-200">
-        NO FIX
-      </span>;
+      return (
+        <span className="text-sm border px-3 bg-linear-to-b from-red-300 to-red-600 text-white border-black">
+          NO FIX
+        </span>
+      );
     if (data.value === 2)
       return (
-        <span className="text-sm border px-3 text-blue-800 bg-blue-200">
+        <span className="text-sm border px-3 bg-linear-to-b from-blue-200 to-blue-400">
           2D FIX
         </span>
       );
     if (data.value === 3)
       return (
-        <span className="text-sm border px-3 text-green-800 bg-green-200">
+        <span className="text-sm border px-3 bg-linear-to-b  from-lime-200 to-lime-400">
           3D FIX
         </span>
       );
   }
   return (
-    <span className="text-sm border px-3 text-zinc-700 bg-zinc-200">???</span>
+    <span className="text-sm border px-3 bg-linear-to-b from-zinc-100 to-zinc-300">
+      ???
+    </span>
   );
 };
 
@@ -58,10 +64,13 @@ export const GNSSStatus = () => {
       </div>
       <div className="flex flex-col">
         <table>
+          <colgroup>
+            <col span={1} width={200} />
+          </colgroup>
           <tbody className="[&>tr:nth-child(even)]:bg-gray-100 [&>tr>td:first-child]:font-bold [&>tr>td]:px-2">
             <tr>
               <td>Time</td>
-              <td></td>
+              <td>{data.get("boat_time")?.value}</td>
             </tr>
             <tr>
               <td>Latitude</td>
