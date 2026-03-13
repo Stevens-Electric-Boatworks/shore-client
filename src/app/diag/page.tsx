@@ -8,11 +8,10 @@ export default function DiagnosticHomePage() {
   const router = useRouter();
 
   useKeybind("l", () => router.push("/diag/logs"));
-  useKeybind("g", () => router.push("/diag/gnss"));
   useKeybind("s", () => router.push("/diag/socket"));
   useKeybind("m", () => router.push("/diag/motor"));
   useKeybind("a", () => router.push("/diag/alarms_history"));
-  useKeybind("r", () => router.push("/relax"));
+  useKeybind("r", () => router.push("/diag/radios"));
   useKeybind("y", () => router.push("/diag/system"));
 
   return (
@@ -23,8 +22,8 @@ export default function DiagnosticHomePage() {
         <NavButton onClick={() => router.push("/diag/logs")}>
           <u>L</u>OGS
         </NavButton>
-        <NavButton onClick={() => router.push("/diag/gnss")}>
-          <u>G</u>NSS
+        <NavButton onClick={() => router.push("/diag/radios")}>
+          <u>R</u>ADIOS
         </NavButton>
         <NavButton onClick={() => router.push("/diag/socket")}>
           <u>S</u>OCKET
