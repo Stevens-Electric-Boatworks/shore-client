@@ -94,9 +94,9 @@ export const GNSSVehicles = () => {
               <tr key={e.prn}>
                 <td>GP</td>
                 <td>{e.prn}</td>
-                <td>{e.elev}</td>
-                <td>{e.azimuth}</td>
-                <td>{e.snr}</td>
+                <td>{e.elev >= 0 ? e.elev : "---"}</td>
+                <td>{e.azimuth >= 0 ? e.azimuth : "---"}</td>
+                <td>{e.snr >= 0 ? e.snr : "---"}</td>
                 <td>{getUseString(e.prn)}</td>
               </tr>
             ))}

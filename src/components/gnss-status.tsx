@@ -144,6 +144,12 @@ export const GNSSStatus = () => {
     return () => clearTimeout(timeout);
   }, [data]);
 
+  const getPrecisionDisplayString = (data?: DataValue) => {
+    if (!data) return "---";
+    if (data.value < 0) return "---";
+    return (data.value as number).toFixed(1);
+  };
+
   return (
     <div className="border bg-white flex-1">
       <div className="border-b bg-linear-to-b from-zinc-100 to-zinc-300 px-2 flex">
@@ -182,15 +188,15 @@ export const GNSSStatus = () => {
             </tr>
             <tr>
               <td>Horizontal Precision</td>
-              <td>{data.get("sat_mode.hdop")?.value}</td>
+              <td>{getPrecisionDisplayString(data.get("sat_mode.hdop"))}</td>
             </tr>
             <tr>
               <td>Vertical Precision</td>
-              <td>{data.get("sat_mode.vdop")?.value}</td>
+              <td>{getPrecisionDisplayString(data.get("sat_mode.vdop"))}</td>
             </tr>
             <tr>
               <td>Position Precision</td>
-              <td>{data.get("sat_mode.pdop")?.value}</td>
+              <td>{getPrecisionDisplayString(data.get("sat_mode.pdop"))}</td>
             </tr>
             <tr>
               <td>Lateral Accuracy Rating</td>
