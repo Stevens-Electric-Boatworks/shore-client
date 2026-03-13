@@ -2,6 +2,7 @@
 
 import { DataValue } from "@/slices/dataSlice";
 import { useStore } from "@/store";
+import { useEffect, useState } from "react";
 
 const OperationMode = ({ data }: { data?: DataValue }) => {
   if (data) {
@@ -56,6 +57,12 @@ const Mode = ({ data }: { data?: DataValue }) => {
 
 const LateralAccruacyRating = ({ data }: { data?: DataValue }) => {
   if (data) {
+    if (data.value < 0)
+      return (
+        <span className="text-sm border px-3 bg-linear-to-b from-zinc-100 to-zinc-300">
+          N/A
+        </span>
+      );
     if (data.value < 1)
       return (
         <span className="text-sm border px-3 bg-linear-to-b  from-lime-200 to-lime-400">
@@ -113,10 +120,39 @@ const LateralAccruacyRating = ({ data }: { data?: DataValue }) => {
 export const GNSSStatus = () => {
   const data = useStore((s) => s.data);
 
+  const [isStale, setIsStale] = useState(true);
+
+  useEffect(() => {
+    const mode = data.get("sat_mode.mode");
+
+    if (!mode) {
+      setIsStale(true);
+      return;
+    }
+
+    setIsStale(false);
+
+    const timeSinceUpdate = Date.now() - new Date(mode.timestamp).getTime();
+    const timeUntilStale = 5000 - timeSinceUpdate;
+
+    if (timeUntilStale <= 0) {
+      setIsStale(true);
+      return;
+    }
+
+    const timeout = setTimeout(() => setIsStale(true), timeUntilStale);
+    return () => clearTimeout(timeout);
+  }, [data]);
+
   return (
     <div className="border bg-white flex-1">
-      <div className="border-b bg-linear-to-b from-zinc-100 to-zinc-300 px-2">
+      <div className="border-b bg-linear-to-b from-zinc-100 to-zinc-300 px-2 flex">
         <p className="font-bold">Status</p>
+        {isStale && (
+          <div className="ml-auto text-sm border-x px-2 font-bold bg-linear-to-b from-red-300 to-red-600 text-white border-black flex items-center">
+            STALE DATA
+          </div>
+        )}
       </div>
       <div className="flex flex-col">
         <table>
