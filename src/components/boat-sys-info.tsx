@@ -45,22 +45,22 @@ export const BoatSystemInformation = () => {
             <tbody className="[&>tr:nth-child(even)]:bg-gray-100 [&>tr>td:first-child]:font-bold">
               <tr>
                 <td>CPU Model</td>
-                <td>{data.get("server.cpu.model")?.value}</td>
+                <td>{data.get("rpi.cpu.model")?.value}</td>
               </tr>
               <tr>
                 <td>CPU Cores</td>
-                <td>{data.get("server.cpu.cores")?.value}</td>
+                <td>{data.get("rpi.cpu.cores")?.value}</td>
               </tr>
               <tr>
                 <td>CPU Speed</td>
-                <td>{data.get("server.cpu.speed")?.value} GHz</td>
+                <td>{data.get("rpi.cpu.speed")?.value} GHz</td>
               </tr>
               <tr>
                 <td>CPU Utilization</td>
                 <td>
-                  {data.get("server.cpu.currentLoad")
+                  {data.get("rpi.cpu.currentLoad")
                     ? (
-                        data.get("server.cpu.currentLoad")?.value as number
+                        data.get("rpi.cpu.currentLoad")?.value as number
                       ).toFixed(2)
                     : ""}
                   %
@@ -68,15 +68,15 @@ export const BoatSystemInformation = () => {
               </tr>
               <tr>
                 <td>Host</td>
-                <td>{data.get("server.os.host")?.value}</td>
+                <td>{data.get("rpi.os.host")?.value}</td>
               </tr>
               <tr>
                 <td>Hostname</td>
-                <td>{data.get("server.os.hostname")?.value}</td>
+                <td>{data.get("rpi.os.hostname")?.value}</td>
               </tr>
               <tr>
                 <td>Platform</td>
-                <td>{data.get("server.os.platform")?.value}</td>
+                <td>{data.get("rpi.os.platform")?.value}</td>
               </tr>
             </tbody>
           </table>
@@ -86,18 +86,18 @@ export const BoatSystemInformation = () => {
             <tbody className="[&>tr:nth-child(even)]:bg-gray-100 [&>tr>td:first-child]:font-bold">
               <tr>
                 <td>Total Memory</td>
-                <td>{formatBytes(data.get("server.memory.total")?.value)}</td>
+                <td>{formatBytes(data.get("rpi.memory.total")?.value)}</td>
               </tr>
               <tr>
                 <td>Active Memory</td>
-                <td>{formatBytes(data.get("server.memory.active")?.value)}</td>
+                <td>{formatBytes(data.get("rpi.memory.active")?.value)}</td>
               </tr>
               <tr>
                 <td>Available Memory</td>
                 <td>
                   {formatBytes(
-                    data.get("server.memory.total")?.value -
-                      data.get("server.memory.active")?.value,
+                    data.get("rpi.memory.total")?.value -
+                      data.get("rpi.memory.active")?.value,
                   )}
                 </td>
               </tr>
@@ -105,8 +105,8 @@ export const BoatSystemInformation = () => {
                 <td>Memory Utilization</td>
                 <td>
                   {(
-                    (data.get("server.memory.active")?.value /
-                      data.get("server.memory.total")?.value) *
+                    (data.get("rpi.memory.active")?.value /
+                      data.get("rpi.memory.total")?.value) *
                     100.0
                   ).toFixed(1)}
                   %
@@ -118,18 +118,18 @@ export const BoatSystemInformation = () => {
             <tbody className="[&>tr:nth-child(even)]:bg-gray-100 [&>tr>td:first-child]:font-bold">
               <tr>
                 <td>Total Memory</td>
-                <td>{formatBytes(data.get("server.memory.total")?.value)}</td>
+                <td>{formatBytes(data.get("rpi.memory.total")?.value)}</td>
               </tr>
               <tr>
                 <td>Active Memory</td>
-                <td>{formatBytes(data.get("server.memory.active")?.value)}</td>
+                <td>{formatBytes(data.get("rpi.memory.active")?.value)}</td>
               </tr>
               <tr>
                 <td>Available Memory</td>
                 <td>
                   {formatBytes(
-                    data.get("server.memory.total")?.value -
-                      data.get("server.memory.active")?.value,
+                    data.get("rpi.memory.total")?.value -
+                      data.get("rpi.memory.active")?.value,
                   )}
                 </td>
               </tr>
@@ -137,8 +137,8 @@ export const BoatSystemInformation = () => {
                 <td>Memory Utilization</td>
                 <td>
                   {(
-                    (data.get("server.memory.active")?.value /
-                      data.get("server.memory.total")?.value) *
+                    (data.get("rpi.memory.active")?.value /
+                      data.get("rpi.memory.total")?.value) *
                     100.0
                   ).toFixed(1)}
                   %
@@ -151,7 +151,7 @@ export const BoatSystemInformation = () => {
           <Gauge
             label="CPU USE"
             size={150}
-            data={data.get("server.cpu.currentLoad")}
+            data={data.get("rpi.cpu.currentLoad")}
             suffix="%"
             danger={85}
             staleDelay={2500}
@@ -159,14 +159,12 @@ export const BoatSystemInformation = () => {
           <Gauge
             label="MEM USE"
             size={150}
-            data={data.get("server.memory.active")}
-            suffix={
-              formatBytesObj(data.get("server.memory.active")?.value).unit
-            }
-            danger={data.get("server.memory.total")?.value * 0.85}
-            high={data.get("server.memory.total")?.value}
+            data={data.get("rpi.memory.active")}
+            suffix={formatBytesObj(data.get("rpi.memory.active")?.value).unit}
+            danger={data.get("rpi.memory.total")?.value * 0.85}
+            high={data.get("rpi.memory.total")?.value}
             valueString={formatBytesObj(
-              data.get("server.memory.active")?.value,
+              data.get("rpi.memory.active")?.value,
             ).value.toFixed(1)}
             staleDelay={2500}
           />
