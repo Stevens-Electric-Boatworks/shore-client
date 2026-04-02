@@ -1,76 +1,29 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import "leaflet/dist/leaflet.css";
+import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
-import { Map as LeafletMap } from "leaflet";
 import { useStore } from "@/store";
-
-const MapContainer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.MapContainer),
-  { ssr: false },
-);
-const TileLayer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.TileLayer),
-  { ssr: false },
-);
-const Marker = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false },
-);
-
-let DefaultIcon;
-if (typeof window !== "undefined") {
-  import("leaflet").then((L) => {
-    DefaultIcon = new L.Icon({
-      iconUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-      iconRetinaUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-      shadowUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41],
-    });
-    L.Marker.prototype.options.icon = DefaultIcon;
-  });
-}
+import MapLibre, { Marker, type MapRef } from "react-map-gl/maplibre";
 
 export const Map = () => {
   const data = useStore((s) => s.data);
-  const mapRef = useRef<LeafletMap | null>(null);
+  const mapRef = useRef<MapRef | null>(null);
 
   const [lat, setLat] = useState(0);
   const [long, setLong] = useState(0);
 
-  useEffect(() => {
-    const lat = data.get("lat")?.value || 0;
-    const long = data.get("long")?.value || 0;
-    setLat(lat);
-    setLong(long);
-
-    mapRef.current?.setView([lat, long], mapRef.current.getZoom(), {
-      animate: false,
-    });
-  }, [data]);
-
   return (
-    <div className="rounded-md border overflow-hidden">
-      <MapContainer
-        center={[lat, long]}
-        zoom={15}
-        style={{ height: "200px", width: "100%" }}
-        zoomControl={false}
+    <div className="rounded-md border overflow-hidden w-full aspect-square">
+      <MapLibre
+        initialViewState={{ longitude: -74, latitude: 40.7, zoom: 6 }}
+        style={{ width: "100%", height: "100%" }}
+        mapStyle={
+          "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+        }
         ref={mapRef}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          //   attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
-        />
-        <Marker position={[lat, long]} />
-      </MapContainer>
+        <Marker latitude={lat} longitude={long} />
+      </MapLibre>
     </div>
   );
 };
