@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { NavButton } from "./ui/nav-button";
 import { useStore } from "@/store";
+import { FilterSelector } from "./filter-selector";
+import { LOG_FILTERS, LogFilter } from "@/lib/filters";
 
 export const LogTable = () => {
   // const [data, setData] = useState<LogData[]>([]);
@@ -10,6 +12,17 @@ export const LogTable = () => {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const logs = useStore((s) => s.logs);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
+
+  const toggleFilter = (name: string) => {
+    setActiveFilters((prev) => {
+      const next = new Set(prev);
+      next.has(name) ? next.delete(name) : next.add(name);
+      return next;
+    });
+  };
+
+  const resetFilters = () => setActiveFilters(new Set());
 
   const selectedLog = logs.find((e) => e.id === selected);
 
@@ -51,6 +64,18 @@ export const LogTable = () => {
     return strings.join(" ");
   };
 
+  const filteredLogs = [...logs]
+    .slice(-3000)
+    .sort(
+      (a, b) =>
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+    )
+    .filter((log) =>
+      LOG_FILTERS.filter((f) => activeFilters.has(f.name)).every((f) =>
+        f.fn(log),
+      ),
+    );
+
   return (
     <div className="flex flex-1 gap-2 min-h-0">
       <div className={`flex-2 min-h-0 border ${isAtBottom && "border-b-2"}`}>
@@ -71,41 +96,39 @@ export const LogTable = () => {
                   <th className="px-2 border-b font-normal">Timestamp</th>
                   <th className="border-b font-normal">Level</th>
                   <th className="border-b font-normal">Emitter</th>
-                  <th className="border-b font-normal">Message</th>
+                  <th className="border-b font-normal flex items-center py-1 pr-6">
+                    <span>Message</span>
+                    <FilterSelector
+                      activeFilters={activeFilters}
+                      onToggle={toggleFilter}
+                      onReset={resetFilters}
+                    />
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {[...logs]
-                  .slice(-3000)
-                  .sort(
-                    (a, b) =>
-                      new Date(a.timestamp).getTime() -
-                      new Date(b.timestamp).getTime(),
-                  )
-                  .map((log, idx) => (
-                    <tr
-                      key={log.id}
-                      className={evaluateLogEntryTableRowStyles(
-                        log.level,
-                        log.id,
-                        idx % 2 == 0,
-                      )}
-                      onClick={() => setSelected(log.id)}
+                {filteredLogs.map((log, idx) => (
+                  <tr
+                    key={log.id}
+                    className={evaluateLogEntryTableRowStyles(
+                      log.level,
+                      log.id,
+                      idx % 2 == 0,
+                    )}
+                    onClick={() => setSelected(log.id)}
+                  >
+                    <td className="px-2 whitespace-nowrap">
+                      {new Date(log.timestamp).toLocaleString()}
+                    </td>
+                    <td className="px-2 text-center font-mono">{log.level}</td>
+                    <td
+                      className={`text-center font-mono text-black/50 ${log.id === selected ? "text-white/60" : "text-black/50"}`}
                     >
-                      <td className="px-2 whitespace-nowrap">
-                        {new Date(log.timestamp).toLocaleString()}
-                      </td>
-                      <td className="px-2 text-center font-mono">
-                        {log.level}
-                      </td>
-                      <td
-                        className={`text-center font-mono text-black/50 ${log.id === selected ? "text-white/60" : "text-black/50"}`}
-                      >
-                        {log.emitter}
-                      </td>
-                      <td className="px-2">{log.message}</td>
-                    </tr>
-                  ))}
+                      {log.emitter}
+                    </td>
+                    <td className="px-2">{log.message}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
