@@ -10,6 +10,7 @@ export const NumberGauge = ({
   label,
   suffix,
   valueString,
+  precision = 0,
   staleDelay = 1500,
 }: {
   data?: {
@@ -23,6 +24,7 @@ export const NumberGauge = ({
   danger?: number;
   label?: string;
   suffix?: string;
+  precision?: number;
   valueString?: string;
   staleDelay?: number;
 }) => {
@@ -54,7 +56,7 @@ export const NumberGauge = ({
       style={{ width: size }}
     >
       <div className="flex items-end gap-1 mb-8">
-        <p className="font-bold text-4xl">{data?.value.toFixed()}</p>
+        <p className="font-bold text-4xl">{data?.value.toFixed(precision)}</p>
         <p>{suffix}</p>
       </div>
       <p className="text-xs">VOLTAGE</p>

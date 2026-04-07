@@ -26,6 +26,7 @@ export default function Home() {
             size={150}
             label="CURRENT"
             data={data.get("motor_a.current")}
+            high={250}
           />
           <Gauge size={150} label="TORQUE" data={data.get("motor_a.torque")} />
           <NumberGauge
@@ -33,6 +34,7 @@ export default function Home() {
             label="VOLTAGE"
             suffix="V"
             size={150}
+            precision={1}
           />
           <MotorState data={data.get("motor_a.enabled")} />
         </div>
@@ -62,9 +64,14 @@ export default function Home() {
             size={150}
             label="CURRENT"
             data={data.get("motor_b.current")}
+            high={250}
           />
           <Gauge size={150} label="TORQUE" data={data.get("motor_b.torque")} />
-          <NumberGauge size={150} data={data.get("motor_b.voltage")} />
+          <NumberGauge
+            size={150}
+            data={data.get("motor_b.voltage")}
+            precision={1}
+          />
           <MotorState data={data.get("motor_b.enabled")} />
         </div>
       </div>
@@ -75,6 +82,7 @@ export default function Home() {
             label="SPEED"
             suffix="kts"
             staleDelay={4000}
+            precision={1}
           />
           <HeadingIndicator data={data.get("heading")} />
         </div>
@@ -93,6 +101,7 @@ export default function Home() {
               high={400}
               suffix="V"
               staleDelay={5000}
+              precision={1}
             />
             <Gauge
               data={data.get("bms.pack_current_raw")}
