@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavButton } from "./ui/nav-button";
 import { useStore } from "@/store";
 import { FilterSelector } from "./filter-selector";
-import { LOG_FILTERS, LogFilter } from "@/lib/filters";
+import { LOG_FILTERS } from "@/lib/filters";
 
 export const LogTable = () => {
   // const [data, setData] = useState<LogData[]>([]);
@@ -12,17 +12,20 @@ export const LogTable = () => {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const logs = useStore((s) => s.logs);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
+  const [activeFilters, setActiveFilters] = useState<Set<string>>(
+    new Set(["hide_rosbridge"]),
+  );
 
   const toggleFilter = (name: string) => {
     setActiveFilters((prev) => {
       const next = new Set(prev);
-      next.has(name) ? next.delete(name) : next.add(name);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
       return next;
     });
   };
 
-  const resetFilters = () => setActiveFilters(new Set());
+  const resetFilters = () => setActiveFilters(new Set(["hide_rosbridge"]));
 
   const selectedLog = logs.find((e) => e.id === selected);
 

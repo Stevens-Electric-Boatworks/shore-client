@@ -10,7 +10,10 @@ export const LOG_FILTERS: LogFilter[] = [
   {
     name: "hide_rosbridge",
     label: "Hide Rosbridge Logs",
-    fn: (log) => log.file?.includes("rosbridge") || true,
+    fn: (log) => {
+      if (log.file) return !log.file.includes("rosbridge");
+      else return true;
+    },
   },
   {
     name: "errors_only",
