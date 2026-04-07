@@ -67,7 +67,12 @@ export default function Home() {
       </div>
       <div className="flex flex-col p-2 gap-2 border bg-white">
         <div className="flex gap-2">
-          <Gauge data={data.get("speed")} label="SPEED" suffix="kts" />
+          <Gauge
+            data={data.get("speed")}
+            label="SPEED"
+            suffix="kts"
+            staleDelay={4000}
+          />
           <HeadingIndicator data={data.get("heading")} />
         </div>
         <div>

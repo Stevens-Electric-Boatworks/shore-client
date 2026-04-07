@@ -9,6 +9,11 @@ export const Map = () => {
   const data = useStore((s) => s.data);
   const mapRef = useRef<MapRef | null>(null);
 
+  useEffect(() => {
+    setLat((data.get("lat")?.value as number) ?? 0);
+    setLong((data.get("long")?.value as number) ?? 0);
+  }, [data]);
+
   const [lat, setLat] = useState(0);
   const [long, setLong] = useState(0);
 
