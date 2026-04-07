@@ -6,6 +6,7 @@ import { NumberGauge } from "@/components/ui/number-gauge";
 import { HeadingIndicator } from "@/components/ui/heading-indicator";
 import { useStore } from "@/store";
 import { Map } from "@/components/map-view";
+import { MotorState } from "@/components/motor-state";
 
 export default function Home() {
   const data = useStore((s) => s.data);
@@ -33,6 +34,7 @@ export default function Home() {
             suffix="V"
             size={150}
           />
+          <MotorState data={data.get("motor_a.enabled")} />
         </div>
         <LinearGauge
           label="THR %"
@@ -63,6 +65,7 @@ export default function Home() {
           />
           <Gauge size={150} label="TORQUE" data={data.get("motor_b.torque")} />
           <NumberGauge size={150} data={data.get("motor_b.voltage")} />
+          <MotorState data={data.get("motor_b.enabled")} />
         </div>
       </div>
       <div className="flex flex-col p-2 gap-2 border bg-white">
