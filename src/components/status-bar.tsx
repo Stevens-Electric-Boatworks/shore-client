@@ -44,6 +44,9 @@ export const StatusBar = () => {
   const grey = "from-gray-200 to-gray-400 text-black";
   const yellow = "from-yellow-100 to-yellow-300 text-black";
 
+  const latestTimeDelta =
+    Date.now() - (data.get("boat_time")?.timestamp.getTime() || 0);
+
   const connectionColor = () => {
     if (isFailed) return red;
     if (isConnecting) return yellow;
@@ -53,7 +56,7 @@ export const StatusBar = () => {
   };
 
   const can_bus_color = () => {
-    if (isConnecting || isFailed) return grey;
+    if (isConnecting || isFailed || latestTimeDelta > 5000) return grey;
     if (can_bus_state == 0) return red;
     if (can_bus_state == 1) return green;
     if (can_bus_state == 2) return blue;
@@ -61,7 +64,8 @@ export const StatusBar = () => {
   };
 
   const can_connection_state = () => {
-    if (isConnecting || isFailed) return "CAN BUS UNAVAIL";
+    if (isConnecting || isFailed || latestTimeDelta > 5000)
+      return "CAN BUS UNAVAIL";
     if (can_bus_state == 0) return "CAN BUS OFFLINE";
     if (can_bus_state == 1) return "CAN BUS OK";
     if (can_bus_state == 2) return "CAN BUS TEST";
@@ -76,20 +80,18 @@ export const StatusBar = () => {
   };
 
   const systemStatus = () => {
-    if (can_bus_state < 0) return "SYSTEMS UNAVAIL";
+    if (can_bus_state < 0 || latestTimeDelta > 5000) return "SYSTEMS UNAVAIL";
     if (isError) return "ACTIVE ALARMS";
     return "SYSTEMS OK";
   };
 
   const systemStatusColor = () => {
-    if (can_bus_state < 0) return grey;
+    if (can_bus_state < 0 || latestTimeDelta > 5000) return grey;
     if (isError) return red;
     return green;
   };
 
   const timeString = () => {
-    const latestTimeDelta =
-      Date.now() - (data.get("boat_time")?.timestamp.getTime() || 0);
     if (!data.get("boat_time") || latestTimeDelta > 5000)
       return new Date().toLocaleString();
     const boatTime = new Date(data.get("boat_time")?.value);
@@ -97,8 +99,6 @@ export const StatusBar = () => {
   };
 
   const timeColor = () => {
-    const latestTimeDelta =
-      Date.now() - (data.get("boat_time")?.timestamp.getTime() || 0);
     if (!data.get("boat_time") || latestTimeDelta > 5000) return grey;
     if (latestTimeDelta > 1500) return yellow;
     if (data.get("boat_time")?.replay) return blue;
