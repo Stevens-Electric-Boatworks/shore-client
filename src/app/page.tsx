@@ -13,66 +13,68 @@ export default function Home() {
 
   return (
     <div className="flex gap-2 justify-center items-center h-full">
-      <div className="border bg-white flex gap-4 p-2">
-        <div className="flex flex-col items-center">
-          <p className="font-bold text-2xl">A</p>
-          <Gauge
-            size={150}
-            label="TEMP"
-            data={data.get("motor_a.temp")}
-            danger={80}
+      <div className="border bg-white flex flex-col gap-4 p-2">
+        <div className="flex gap-4">
+          <div className="flex flex-col items-center">
+            <p className="font-bold text-2xl">A</p>
+            <Gauge
+              size={150}
+              label="TEMP"
+              data={data.get("motor_a.temp")}
+              danger={80}
+            />
+            <Gauge
+              size={150}
+              label="CURRENT"
+              data={data.get("motor_a.current")}
+              high={250}
+            />
+            <Gauge size={150} label="TORQUE" data={data.get("motor_a.torque")} />
+            <NumberGauge
+              data={data.get("motor_a.voltage")}
+              label="VOLTAGE"
+              suffix="V"
+              size={150}
+              precision={1}
+            />
+            <MotorState data={data.get("motor_a.enabled")} />
+          </div>
+          <LinearGauge
+            label="THR %"
+            direction="vertical"
+            data={data.get("motors.throttle")}
+            thickness={30}
           />
-          <Gauge
-            size={150}
-            label="CURRENT"
-            data={data.get("motor_a.current")}
-            high={250}
+          <LinearGauge
+            label="RPM"
+            direction="vertical"
+            thickness={30}
+            dangerHigh={4000}
+            high={6000}
+            data={data.get("motors.rpm")}
           />
-          <Gauge size={150} label="TORQUE" data={data.get("motor_a.torque")} />
-          <NumberGauge
-            data={data.get("motor_a.voltage")}
-            label="VOLTAGE"
-            suffix="V"
-            size={150}
-            precision={1}
-          />
-          <MotorState data={data.get("motor_a.enabled")} />
-        </div>
-        <LinearGauge
-          label="THR %"
-          direction="vertical"
-          data={data.get("motors.throttle")}
-          thickness={30}
-        />
-        <LinearGauge
-          label="RPM"
-          direction="vertical"
-          thickness={30}
-          dangerHigh={4000}
-          high={6000}
-          data={data.get("motors.rpm")}
-        />
-        <div className="flex flex-col items-center">
-          <p className="font-bold text-2xl">B</p>
-          <Gauge
-            size={150}
-            label="TEMP"
-            data={data.get("motor_b.temp")}
-            danger={80}
-          />
-          <Gauge
-            size={150}
-            label="CURRENT"
-            data={data.get("motor_b.current")}
-            high={250}
-          />
-          <Gauge size={150} label="TORQUE" data={data.get("motor_b.torque")} />
-          <NumberGauge
-            size={150}
-            data={data.get("motor_b.voltage")}
-            precision={1}
-          />
-          <MotorState data={data.get("motor_b.enabled")} />
+          <div className="flex flex-col items-center">
+            <p className="font-bold text-2xl">B</p>
+            <Gauge
+              size={150}
+              label="TEMP"
+              data={data.get("motor_b.temp")}
+              danger={80}
+            />
+            <Gauge
+              size={150}
+              label="CURRENT"
+              data={data.get("motor_b.current")}
+              high={250}
+            />
+            <Gauge size={150} label="TORQUE" data={data.get("motor_b.torque")} />
+            <NumberGauge
+              size={150}
+              data={data.get("motor_b.voltage")}
+              precision={1}
+            />
+            <MotorState data={data.get("motor_b.enabled")} />
+          </div>
         </div>
       </div>
       <div className="flex flex-col p-2 gap-2 border bg-white">
@@ -90,47 +92,67 @@ export default function Home() {
           <Map />
         </div>
       </div>
-      <div className="flex gap-2">
-        <div className="flex p-2 gap-2 border bg-white">
-          <div className="flex flex-col gap-2">
-            <Gauge
-              data={data.get("bms.pack_voltage_raw")}
-              label="VBAT"
-              size={150}
-              low={300}
-              high={400}
-              suffix="V"
-              staleDelay={5000}
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-4">
+          <div className="flex p-2 gap-2 border bg-white">
+            <div className="flex flex-col gap-2">
+              <Gauge
+                data={data.get("bms.pack_voltage_raw")}
+                label="VBAT"
+                size={150}
+                low={300}
+                high={400}
+                suffix="V"
+                staleDelay={5000}
+                precision={1}
+              />
+              <Gauge
+                data={data.get("bms.pack_current_raw")}
+                label="BAT AMPS"
+                size={150}
+                suffix="A"
+                danger={500}
+                high={750}
+                staleDelay={5000}
+              />
+              <Gauge data={data.get("")} label="TEMP BAT" size={150} suffix="°" />
+            </div>
+
+            <LinearGauge
+              data={data.get("bms.soc_percent")}
+              label="BAT %"
+              suffix="%"
+              thickness={30}
+              dangerLow={20}
               precision={1}
             />
-            <Gauge
-              data={data.get("bms.pack_current_raw")}
-              label="BAT AMPS"
-              size={150}
-              suffix="A"
-              danger={500}
-              high={750}
-              staleDelay={5000}
-            />
-            <Gauge data={data.get("")} label="TEMP BAT" size={150} suffix="°" />
+
+            <div className="flex flex-col gap-2">
+              <Gauge data={data.get("")} label="BMS TEMP" suffix="°" size={150} />
+              <Gauge
+                data={data.get("")}
+                label="BAT COMP TEMP"
+                suffix="°"
+                size={150}
+              />
+            </div>
           </div>
-
-          <LinearGauge
-            data={data.get("bms.soc_percent")}
-            label="BAT %"
-            suffix="%"
-            thickness={30}
-            dangerLow={20}
-          />
-
-          <div className="flex flex-col gap-2">
-            <Gauge data={data.get("")} label="BMS TEMP" suffix="°" size={150} />
-            <Gauge
-              data={data.get("")}
-              label="BAT COMP TEMP"
-              suffix="°"
-              size={150}
-            />
+        </div>
+        <div className="w-full">
+          <div className="flex p-2 gap-2 border bg-white items-center">
+            <div className="w-full">
+              <LinearGauge
+                label="COOLING TEMP"
+                direction="horizontal"
+                data={data.get("cooling_temp")}
+                dangerHigh={40.0}
+                low={0}
+                high={100}
+                suffix="°"
+                precision={1}
+                thickness={20}
+              />
+            </div>
           </div>
         </div>
       </div>
