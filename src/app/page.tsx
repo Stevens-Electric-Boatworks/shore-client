@@ -29,7 +29,11 @@ export default function Home() {
               data={data.get("motor_a.current")}
               high={250}
             />
-            <Gauge size={150} label="TORQUE" data={data.get("motor_a.torque")} />
+            <Gauge
+              size={150}
+              label="TORQUE"
+              data={data.get("motor_a.torque")}
+            />
             <NumberGauge
               data={data.get("motor_a.voltage")}
               label="VOLTAGE"
@@ -67,7 +71,11 @@ export default function Home() {
               data={data.get("motor_b.current")}
               high={250}
             />
-            <Gauge size={150} label="TORQUE" data={data.get("motor_b.torque")} />
+            <Gauge
+              size={150}
+              label="TORQUE"
+              data={data.get("motor_b.torque")}
+            />
             <NumberGauge
               size={150}
               data={data.get("motor_b.voltage")}
@@ -100,8 +108,8 @@ export default function Home() {
                 data={data.get("bms.pack_voltage_raw")}
                 label="VBAT"
                 size={150}
-                low={300}
-                high={400}
+                low={40}
+                high={60}
                 suffix="V"
                 staleDelay={5000}
                 precision={1}
@@ -115,7 +123,12 @@ export default function Home() {
                 high={750}
                 staleDelay={5000}
               />
-              <Gauge data={data.get("")} label="TEMP BAT" size={150} suffix="°" />
+              <Gauge
+                data={data.get("")}
+                label="TEMP BAT"
+                size={150}
+                suffix="°"
+              />
             </div>
 
             <LinearGauge
@@ -128,7 +141,12 @@ export default function Home() {
             />
 
             <div className="flex flex-col gap-2">
-              <Gauge data={data.get("")} label="BMS TEMP" suffix="°" size={150} />
+              <Gauge
+                data={data.get("")}
+                label="BMS TEMP"
+                suffix="°"
+                size={150}
+              />
               <Gauge
                 data={data.get("")}
                 label="BAT COMP TEMP"
