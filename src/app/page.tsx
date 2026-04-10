@@ -7,6 +7,8 @@ import { HeadingIndicator } from "@/components/ui/heading-indicator";
 import { useStore } from "@/store";
 import { Map } from "@/components/map-view";
 import { MotorState } from "@/components/motor-state";
+import { CellBars } from "@/components/ui/cell-bars";
+import { Mode, OperationMode } from "@/components/gnss-status";
 
 export default function Home() {
   const data = useStore((s) => s.data);
@@ -101,6 +103,21 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col gap-2">
+        <div className="flex p-2 gap-2 border bg-white items-center">
+          <div className="flex items-center gap-2 w-full">
+            <CellBars bars={data.get("cell.bars")?.value} />
+            <p>
+              {data.get("cell.network")?.value}{" "}
+              {data.get("cell.technology")?.value}
+            </p>
+
+            <div className="ml-auto flex items-center gap-2">
+              <Mode data={data.get("sat_mode.mode")} />
+              <OperationMode data={data.get("sat_mode.op_mode")} />
+            </div>
+          </div>
+        </div>
+
         <div className="flex gap-4">
           <div className="flex p-2 gap-2 border bg-white">
             <div className="flex flex-col gap-2">
@@ -156,21 +173,20 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="w-full">
-          <div className="flex p-2 gap-2 border bg-white items-center">
-            <div className="w-full">
-              <LinearGauge
-                label="COOLING TEMP"
-                direction="horizontal"
-                data={data.get("cooling_temp")}
-                dangerHigh={40.0}
-                low={0}
-                high={100}
-                suffix="°"
-                precision={1}
-                thickness={20}
-              />
-            </div>
+
+        <div className="flex p-2 gap-2 border bg-white items-center">
+          <div className="w-full">
+            <LinearGauge
+              label="COOLING TEMP"
+              direction="horizontal"
+              data={data.get("cooling_temp")}
+              dangerHigh={40.0}
+              low={0}
+              high={100}
+              suffix="°"
+              precision={1}
+              thickness={20}
+            />
           </div>
         </div>
       </div>
