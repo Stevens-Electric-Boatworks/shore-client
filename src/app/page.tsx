@@ -159,6 +159,12 @@ export default function Home() {
 
             <div className="flex flex-col gap-2">
               <Gauge
+                data={data.get("booster_temp")}
+                label="BOOSTER TEMP"
+                suffix="°"
+                size={150}
+              />
+              <Gauge
                 data={data.get("")}
                 label="BMS TEMP"
                 suffix="°"
