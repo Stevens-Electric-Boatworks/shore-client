@@ -89,7 +89,7 @@ export const Gauge = ({
             "--size": `${size}px`,
             "--value": Math.max(
               0,
-              Math.min(1, (data?.value || 0 - low) / (high - low)),
+              Math.min(1, ((data?.value || 0) - low) / (high - low)),
             ),
             "--color": isDanger ? "red" : isWarn ? "orange" : "lime",
           } as React.CSSProperties

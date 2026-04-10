@@ -12,14 +12,17 @@ export const AlarmsTable = () => {
   const alarms = useStore((s) => s.alarms);
   const acknowledge = useStore((s) => s.acknowledgeAlarm);
 
-  const sorted = alarms.slice().sort((a, b) => {
-    // First, sort by type: ERRORs before WARNINGs
-    if (a.type !== b.type) {
-      return a.type.toUpperCase() === "ERROR" ? -1 : 1;
-    }
-    // Then, sort by timestamp: newest first
-    return b.raisedAt.getTime() - a.raisedAt.getTime();
-  });
+  const sorted = alarms
+    .slice()
+    .filter((e) => !e.resolvedAt)
+    .sort((a, b) => {
+      // First, sort by type: ERRORs before WARNINGs
+      if (a.type !== b.type) {
+        return a.type.toUpperCase() === "ERROR" ? -1 : 1;
+      }
+      // Then, sort by timestamp: newest first
+      return b.raisedAt.getTime() - a.raisedAt.getTime();
+    });
 
   const acknowledgeAll = () => {
     sorted
