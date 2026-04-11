@@ -41,18 +41,11 @@ export const registerAlarmsSlice = (
       }));
     } else if (msg.action == "resolve") {
       const id = msg.id as number;
-      const now = new Date();
       set((state) => {
         const alarms = Array.from(state.alarms);
-        console.log(JSON.stringify(alarms));
-        alarms
-          .filter((e) => e.id == id)
-          .filter((e) => !e.resolvedAt)
-          .forEach((e) => {
-            e.resolvedAt = now;
-          });
-        console.log(JSON.stringify(state.alarms));
-        return { alarms };
+        return {
+          alarms: alarms.filter((e) => e.id == id).filter((e) => !e.resolvedAt),
+        };
       });
     } else if (msg.action == "acknowledge") {
       const id = msg.id as number;
