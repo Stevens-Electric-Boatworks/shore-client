@@ -44,8 +44,10 @@ export default function Home() {
               size={150}
               precision={1}
             />
-            <MotorState data={data.get("motor_a.enabled")} />
-            <MotorCurrentLimit is_limited={data.get("motor_a.current_limited")} limit_reason={data.get("motor_a.current_limit_reason")}  />
+           <div className="div w-full flex flex-col gap-2">
+              <MotorState data={data.get("motor_a.enabled")} />
+              <MotorCurrentLimit is_limited={data.get("motor_a.current_limited")} limit_reason={data.get("motor_a.current_limit_reason")} />
+            </div>
           </div>
           <LinearGauge
             label="THR %"
@@ -85,8 +87,10 @@ export default function Home() {
               data={data.get("motor_b.voltage")}
               precision={1}
             />
-            <MotorState data={data.get("motor_b.enabled")} />
-            <MotorCurrentLimit is_limited={data.get("motor_b.current_limited")} limit_reason={data.get("motor_a.current_limit_reason")}/>
+            <div className="div w-full flex flex-col gap-2">
+              <MotorState data={data.get("motor_b.enabled")} />
+              <MotorCurrentLimit is_limited={data.get("motor_b.current_limited")} limit_reason={data.get("motor_b.current_limit_reason")} />
+            </div>
           </div>
         </div>
       </div>
