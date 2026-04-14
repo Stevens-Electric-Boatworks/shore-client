@@ -9,6 +9,7 @@ import { Map } from "@/components/map-view";
 import { MotorState } from "@/components/motor-state";
 import { CellBars } from "@/components/ui/cell-bars";
 import { Mode, OperationMode } from "@/components/gnss-status";
+import { MotorCurrentLimit } from "@/components/motor-current-limit";
 
 export default function Home() {
   const data = useStore((s) => s.data);
@@ -44,6 +45,7 @@ export default function Home() {
               precision={1}
             />
             <MotorState data={data.get("motor_a.enabled")} />
+            <MotorCurrentLimit is_limited={data.get("motor_a.current_limited")} limit_reason={data.get("motor_a.current_limit_reason")}  />
           </div>
           <LinearGauge
             label="THR %"
@@ -84,6 +86,7 @@ export default function Home() {
               precision={1}
             />
             <MotorState data={data.get("motor_b.enabled")} />
+            <MotorCurrentLimit is_limited={data.get("motor_b.current_limited")} limit_reason={data.get("motor_a.current_limit_reason")}/>
           </div>
         </div>
       </div>
