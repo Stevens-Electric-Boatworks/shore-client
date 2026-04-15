@@ -13,7 +13,7 @@ export const ErrorBar = () => {
 
   // The error to display
   const error = alarms
-    .filter((e) => !e.acknowledgedAt || !e.resolvedAt)
+    .filter((e) => !e.acknowledgedAt)
     .slice()
     .sort((a, b) => {
       // First, sort by type: ERRORs before WARNINGs
