@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { ModalProvider } from "@/components/contexts/modal-provider";
 import { useAuth } from "@/components/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { LineSpinner } from "ldrs/react";
 
 export default function RootLayout({
   children,
@@ -43,6 +44,19 @@ export default function RootLayout({
 
     return () => disconnect();
   }, [socketUrl, loaded]);
+
+  if (isLoading)
+    return (
+      <div className="flex flex-col h-screen w-screen">
+        <div className="absolute h-full w-full -z-50 pinstripe" />
+        <div className="flex flex-col items-center justify-center flex-1 p-2 min-h-0">
+          <div className="flex gap-2 items-center border-2 border-b-zinc-300 border-r-zinc-300 border-t-zinc-100 border-l-zinc-100 bg-white p-2">
+            <LineSpinner size={32} stroke={2} />
+            <p>Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div className="flex flex-col h-screen w-screen">
