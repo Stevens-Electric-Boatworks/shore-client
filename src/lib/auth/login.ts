@@ -2,6 +2,12 @@ import axios from "axios";
 import { AUTH_CONFIG } from "./config";
 import { tokenStorage } from "./tokenStorage";
 
+interface UserResponse {
+  id: string;
+  username: string;
+  role: "USER" | "ADMIN";
+}
+
 const login = async (username: string, password: string) => {
   // Validation is already done by the LoginCard component :)
   try {
@@ -21,7 +27,7 @@ const login = async (username: string, password: string) => {
       tokenStorage.setRefreshToken(res.data.refreshToken);
     }
 
-    return res.data.user;
+    return res.data.user as UserResponse;
   } catch (err) {
     throw err;
   }
