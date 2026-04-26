@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { clearInterval } from "timers";
 import { useStore } from "@/store";
 import { useAuth } from "./contexts/AuthContext";
 import { UsernameStatusBar } from "./username-status-bar";
 
 export const StatusBar = () => {
   const { alarms, ws, latencies, can_bus_state, data } = useStore();
-  const { user } = useAuth();
 
   const [isFailed, setIsFailed] = useState(false);
   const [isConnecting, setIsConnecting] = useState(true);
