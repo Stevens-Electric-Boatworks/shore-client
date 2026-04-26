@@ -27,6 +27,13 @@ export const ErrorBar = () => {
   // Don't show if no errors
   if (!error) return;
 
+  const getString = () => {
+    return error.raisedAt.toLocaleString() + " " + error.type.toUpperCase() ===
+      "ERROR"
+      ? "[ERR]"
+      : "[WARN]" + " (" + error.id + ") " + error.message;
+  };
+
   return (
     <div
       className={`flex px-2 bg-gradient-to-b border-t-1
@@ -37,11 +44,7 @@ export const ErrorBar = () => {
         }
     `}
     >
-      <p>
-        {error.raisedAt.toLocaleString()} :{" "}
-        {error.type.toUpperCase() === "ERROR" ? "[ERR]" : "[WARN]"}{" "}
-        {error.message}
-      </p>
+      <p>{getString()}</p>
 
       <button
         onClick={() => acknowledge(error.id)}

@@ -17,6 +17,7 @@ type LinearGaugeProps = {
   direction?: "vertical" | "horizontal";
   centered?: boolean;
   thickness?: number;
+  precision?: number;
 };
 
 export const LinearGauge = ({
@@ -31,6 +32,7 @@ export const LinearGauge = ({
   direction = "vertical",
   centered = false,
   thickness = 20,
+  precision = 0
 }: LinearGaugeProps) => {
   // Normalize value between 0 and 100
   const normalizedValue =
@@ -97,7 +99,7 @@ export const LinearGauge = ({
           <p className={`relative text-sm font-bold`}>{label}</p>
         )}
         <p className="text-sm">
-          {data?.value?.toFixed()}
+          {data?.value?.toFixed(precision)}
           {suffix}
         </p>
       </div>

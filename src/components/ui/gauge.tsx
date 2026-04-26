@@ -15,6 +15,7 @@ export const Gauge = ({
   suffix,
   valueString,
   staleDelay = 1500,
+  precision = 0,
 }: {
   // value?: number; #
   data?: {
@@ -30,6 +31,7 @@ export const Gauge = ({
   suffix?: string;
   valueString?: string;
   staleDelay?: number;
+  precision?: number;
 }) => {
   const isDanger =
     danger !== undefined && data?.value !== undefined && data.value >= danger;
@@ -60,7 +62,7 @@ export const Gauge = ({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const displayValue = (data: any) => {
-    if (typeof data === "number") return data.toFixed();
+    if (typeof data === "number") return data.toFixed(precision);
     if (!data) return "";
     return "" + data;
   };
@@ -87,7 +89,7 @@ export const Gauge = ({
             "--size": `${size}px`,
             "--value": Math.max(
               0,
-              Math.min(1, (data?.value || 0 - low) / (high - low)),
+              Math.min(1, ((data?.value || 0) - low) / (high - low)),
             ),
             "--color": isDanger ? "red" : isWarn ? "orange" : "lime",
           } as React.CSSProperties

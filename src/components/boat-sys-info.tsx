@@ -56,6 +56,10 @@ export const BoatSystemInformation = () => {
                 <td>{data.get("rpi.cpu.speed")?.value} GHz</td>
               </tr>
               <tr>
+                <td>CPU Temp</td>
+                <td>{data.get("rpi.cpu.temp")?.value} GHz</td>
+              </tr>
+              <tr>
                 <td>CPU Utilization</td>
                 <td>
                   {data.get("rpi.cpu.currentLoad")

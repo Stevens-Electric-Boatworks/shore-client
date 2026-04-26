@@ -35,29 +35,26 @@ export default function Home() {
         <div className="flex p-2 gap-2 border bg-white">
           <div className="flex flex-col gap-2">
             <Gauge
-              data={data.get("vbat")}
+              data={data.get("bms.pack_voltage_raw")}
               label="VBAT"
               size={150}
               low={300}
               high={400}
               suffix="V"
+              staleDelay={5000}
             />
             <Gauge
-              data={data.get("current_bat")}
+              data={data.get("bms.pack_current_raw")}
               label="BAT AMPS"
               size={150}
               suffix="A"
+              staleDelay={5000}
             />
-            <Gauge
-              data={data.get("temp_bat")}
-              label="TEMP BAT"
-              size={150}
-              suffix="°"
-            />
+            <Gauge data={data.get("")} label="TEMP BAT" size={150} suffix="°" />
           </div>
 
           <LinearGauge
-            data={data.get("battery_percent")}
+            data={data.get("bms.soc_percent")}
             label="BAT %"
             suffix="%"
             thickness={30}
@@ -65,14 +62,9 @@ export default function Home() {
           />
 
           <div className="flex flex-col gap-2">
+            <Gauge data={data.get("")} label="BMS TEMP" suffix="°" size={150} />
             <Gauge
-              data={data.get("bms_temp")}
-              label="BMS TEMP"
-              suffix="°"
-              size={150}
-            />
-            <Gauge
-              data={data.get("bat_comp_temp")}
+              data={data.get("")}
               label="BAT COMP TEMP"
               suffix="°"
               size={150}

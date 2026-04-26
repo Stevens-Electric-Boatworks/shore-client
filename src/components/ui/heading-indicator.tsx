@@ -23,7 +23,7 @@ export const HeadingIndicator = ({
       />
       {(data === undefined ||
         data.value === undefined ||
-        new Date().getTime() - data.timestamp.getTime() > 2000) && (
+        new Date().getTime() - data.timestamp.getTime() > 4000) && (
         <svg
           style={{
             position: "absolute",

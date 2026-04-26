@@ -4,7 +4,7 @@ import { DataValue } from "@/slices/dataSlice";
 import { useStore } from "@/store";
 import { useEffect, useState } from "react";
 
-const OperationMode = ({ data }: { data?: DataValue }) => {
+export const OperationMode = ({ data }: { data?: DataValue }) => {
   if (data) {
     if (data.value === "A")
       return (
@@ -27,7 +27,7 @@ const OperationMode = ({ data }: { data?: DataValue }) => {
   );
 };
 
-const Mode = ({ data }: { data?: DataValue }) => {
+export const Mode = ({ data }: { data?: DataValue }) => {
   if (data) {
     if (data.value === 1)
       return (

@@ -40,6 +40,13 @@ export const registerAlarmsSlice = (
         alarms: [alarm, ...state.alarms].slice(-500),
       }));
     } else if (msg.action == "resolve") {
+      const id = msg.id as number;
+      set((state) => {
+        const alarms = Array.from(state.alarms);
+        return {
+          alarms: alarms.filter((e) => e.id == id).filter((e) => !e.resolvedAt),
+        };
+      });
     } else if (msg.action == "acknowledge") {
       const id = msg.id as number;
       const now = new Date();
