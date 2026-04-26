@@ -17,7 +17,8 @@ const login = async (username: string, password: string) => {
     );
 
     if (res.data.accessToken) {
-      tokenStorage.set(res.data.accessToken);
+      tokenStorage.setAccessToken(res.data.accessToken);
+      tokenStorage.setRefreshToken(res.data.refreshToken);
     }
 
     return res.data.user;

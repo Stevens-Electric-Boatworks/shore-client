@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // On mount, check if we have a valid session
     const isLikelyAuthenticated = AUTH_CONFIG.isCrossDomain
-      ? Boolean(tokenStorage.get())
+      ? Boolean(tokenStorage.getRefreshToken())
       : true; // Cookie presence can't be checked from JS — always try
 
     if (!isLikelyAuthenticated) {
