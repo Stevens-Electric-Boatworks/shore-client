@@ -13,6 +13,7 @@ export default function DiagnosticHomePage() {
   useKeybind("a", () => router.push("/diag/alarms_history"));
   useKeybind("r", () => router.push("/diag/radios"));
   useKeybind("y", () => router.push("/diag/system"));
+  useKeybind("b", () => router.push("/diag/battery"));
 
   return (
     <div className="flex flex-col h-full">
@@ -30,6 +31,9 @@ export default function DiagnosticHomePage() {
         </NavButton>
         <NavButton onClick={() => router.push("/diag/motor")}>
           <u>M</u>OTOR
+        </NavButton>
+        <NavButton onClick={() => router.push("/diag/battery")}>
+          <u>B</u>ATTERY
         </NavButton>
         <NavButton onClick={() => router.push("/diag/alarms_history")}>
           <u>A</u>LARM HISTORY

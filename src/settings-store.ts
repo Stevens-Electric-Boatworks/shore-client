@@ -9,6 +9,8 @@ export type SettingsStoreState = {
   loadSettings: () => void;
 };
 
+const IGNORED_KEYS = ["jsdos", "access_token", "refresh_token"];
+
 export const useSettingsStore = create<SettingsStoreState>()((...args) => {
   const [set, get] = args;
   return {
@@ -29,9 +31,11 @@ export const useSettingsStore = create<SettingsStoreState>()((...args) => {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (!key) continue;
-        if (key.startsWith("jsdos")) continue;
+        console.log(key);
+        if (IGNORED_KEYS.some((s) => key.includes(s))) continue;
 
         const value = localStorage.getItem(key);
+        console.log(value);
         newSettings.set(key, value ? JSON.parse(value) : null);
       }
       console.log(newSettings);

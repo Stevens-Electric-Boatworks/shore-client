@@ -69,6 +69,7 @@ export const ButtonsBar = () => {
         <u>D</u>IAGNOSTIC
       </NavButton>
       <NavButton onClick={() => router.push("/data")}>DATA</NavButton>
+      <NavButton onClick={() => router.push("/access")}>ACCESS</NavButton>
       <div className="ml-auto flex gap-2">
         <NavButton onClick={() => onOpen("settings")}>SETTINGS</NavButton>
         <NavButton>HELP</NavButton>

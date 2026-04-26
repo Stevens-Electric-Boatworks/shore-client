@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { clearInterval } from "timers";
 import { useStore } from "@/store";
+import { useAuth } from "./contexts/AuthContext";
 
 export const StatusBar = () => {
   const { alarms, ws, latencies, can_bus_state, data } = useStore();
+  const { user } = useAuth();
 
   const [isFailed, setIsFailed] = useState(false);
   const [isConnecting, setIsConnecting] = useState(true);
@@ -108,7 +110,7 @@ export const StatusBar = () => {
   return (
     <div className="text-sm md:text-base flex px-2 border-b-1 shadow-md bg-gradient-to-b from-blue-100 to-blue-300">
       <div className="lg:flex hidden">
-        <p>SIT Electric Boatworks</p>
+        <p>{user?.username}</p>
       </div>
 
       <div className="flex flex-1/2 justify-center gap-2">
