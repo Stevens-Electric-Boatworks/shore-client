@@ -1,7 +1,6 @@
 "use client";
 
 import { useSettingsStore } from "@/settings-store";
-import "./styles.css";
 
 export const AudioSettings = () => {
   const { settings, setSetting } = useSettingsStore();
