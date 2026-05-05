@@ -6,8 +6,9 @@ import { User } from "@/types/user";
 import { createContext, useContext, useEffect, useState } from "react";
 import loginFn from "@/lib/auth/login";
 import logoutFn from "@/lib/auth/logout";
+import resetPasswordFn from "@/lib/auth/resetPassword";
 import { AUTH_CONFIG } from "@/lib/auth/config";
-import { setLazyProp } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 
 interface AuthContextValue {
   user: User | null;
@@ -15,6 +16,7 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  resetPassword: (newPassword: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -22,6 +24,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     // On mount, check if we have a valid session
@@ -37,7 +40,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     apiClient
       .get("/auth/me")
       .then((s) => {
-        setUser(s.data.user as User);
+        const user = s.data.user as User;
+        setUser(user);
       })
       .catch(() => {
         tokenStorage.clear();
@@ -49,6 +53,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (username: string, password: string) => {
     const user = await loginFn(username, password);
     setUser(user);
+    if (user.needsPasswordReset) router.replace("/reset-password");
+    else router.replace("/");
   };
 
   const logout = async () => {
@@ -56,9 +62,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
   };
 
+  const resetPassword = async (newPassword: string) => {
+    const user = await resetPasswordFn(newPassword);
+    setUser(user);
+    router.replace("/");
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, isAuthenticated: Boolean(user), login, logout }}
+      value={{
+        user,
+        isLoading,
+        isAuthenticated: Boolean(user),
+        login,
+        logout,
+        resetPassword,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -10,15 +10,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    console.log(!isLoading);
-    if (!isLoading && isAuthenticated) {
-      router.replace("/");
+    if (!isLoading && isAuthenticated && user) {
+      if (user.needsPasswordReset) router.replace("/reset-password");
+      else router.replace("/");
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, user, router]);
 
   return (
     <div className="flex flex-col h-screen w-screen">

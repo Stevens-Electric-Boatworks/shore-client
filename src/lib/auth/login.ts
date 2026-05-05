@@ -6,6 +6,7 @@ interface UserResponse {
   id: string;
   username: string;
   role: "USER" | "ADMIN";
+  needsPasswordReset?: boolean;
 }
 
 const login = async (username: string, password: string) => {

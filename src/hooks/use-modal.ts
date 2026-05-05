@@ -1,21 +1,23 @@
 import { create } from "zustand";
 
-export type ModalType = "settings";
+export type ModalType = "settings" | "confirmUserDeactivation";
 
 type ModalStore = {
   type: ModalType | null;
   isOpen: boolean;
-  onOpen: (type: ModalType) => void;
+  onOpen: (type: ModalType, data?: unknown) => void;
   onClose: () => void;
+  data: unknown;
 };
 
 export const useModal = create<ModalStore>((set) => ({
   type: null,
   isOpen: false,
-  onOpen: (type) => {
-    set({ isOpen: true, type });
+  onOpen: (type, data = null) => {
+    set({ isOpen: true, type, data });
   },
   onClose: () => {
-    set({ isOpen: false, type: null });
+    set({ isOpen: false, type: null, data: null });
   },
+  data: null,
 }));

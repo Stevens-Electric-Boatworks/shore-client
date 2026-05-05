@@ -8,10 +8,12 @@ import { useEffect } from "react";
 import { useLoopingSound } from "@/hooks/use-looping-sound";
 import { useModal } from "@/hooks/use-modal";
 import { useSettingsStore } from "@/settings-store";
+import { useAuth } from "./contexts/AuthContext";
 
 export const ButtonsBar = () => {
   const router = useRouter();
   const alarms = useStore((s) => s.alarms);
+  const { user } = useAuth();
 
   const audioEnabled = useSettingsStore(
     (s) => s.settings.get("audio.enabled") as boolean,
@@ -69,7 +71,9 @@ export const ButtonsBar = () => {
         <u>D</u>IAGNOSTIC
       </NavButton>
       <NavButton onClick={() => router.push("/data")}>DATA</NavButton>
-      <NavButton onClick={() => router.push("/access")}>ACCESS</NavButton>
+      {user?.role === "ADMIN" && (
+        <NavButton onClick={() => router.push("/access")}>ACCESS</NavButton>
+      )}
       <div className="ml-auto flex gap-2">
         <NavButton onClick={() => onOpen("settings")}>SETTINGS</NavButton>
         <NavButton>HELP</NavButton>

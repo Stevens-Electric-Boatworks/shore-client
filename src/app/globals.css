@@ -47,3 +47,37 @@ body {
     color: black;
   }
 }
+
+.button {
+  padding: 0.5rem;
+  cursor: pointer;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  background-color: var(--btn-color-mid);
+  border-top: 0.25rem solid var(--btn-color-light);
+  border-left: 0.25rem solid var(--btn-color-light);
+  border-bottom: 0.25rem solid var(--btn-color-dark);
+  border-right: 0.25rem solid var(--btn-color-dark);
+}
+.button:hover {
+  background-color: var(--btn-color-dark);
+}
+
+.button-blue {
+  --btn-color-light: var(--color-blue-400);
+  --btn-color-mid: var(--color-blue-600);
+  --btn-color-dark: var(--color-blue-700);
+}
+
+.button-red {
+  --btn-color-light: var(--color-red-400);
+  --btn-color-mid: var(--color-red-600);
+  --btn-color-dark: var(--color-red-700);
+}
+
+.button-secondary {
+  --btn-color-light: var(--color-zinc-400);
+  --btn-color-mid: var(--color-zinc-600);
+  --btn-color-dark: var(--color-zinc-700);
+}

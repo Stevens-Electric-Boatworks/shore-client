@@ -40,13 +40,11 @@ export const LoginCard = () => {
 
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuth();
-  const router = useRouter();
 
   const onSubmit = async (data: LoginData) => {
     // only called if Zod validation passes
     try {
       await login(data.username, data.password);
-      router.push("/");
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         const res = err.response;
@@ -63,13 +61,16 @@ export const LoginCard = () => {
   return (
     <div className="border bg-white w-80">
       <div className="border-b bg-gradient-to-b from-zinc-100 to-zinc-300 px-2">
-        <p>Login</p>
+        <p>Log In</p>
       </div>
       <div className="flex flex-col gap-2 p-2">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
           <div className="flex flex-col">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username" className="font-bold">
+              Username
+            </label>
             <input
+              autoCorrect="none"
               {...register("username")}
               className={cn("border", errors.username && "border-red-700")}
             />
@@ -79,7 +80,9 @@ export const LoginCard = () => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className="font-bold">
+              Password
+            </label>
             <input
               type="password"
               {...register("password")}
