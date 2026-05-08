@@ -41,17 +41,31 @@ export default function UserDetailPage() {
   return (
     <div className="space-y-2">
       <div className="flex gap-2">
-        <div className="border bg-white p-2 flex-1">
-          <p className="font-bold">Username</p>
-          <p>{data.username}</p>
-          <p className="font-bold">Role</p>
-          <p>{data.role}</p>
-          <p className="font-bold">User ID</p>
-          <p className="font-mono">{data.id}</p>
-          <p className="font-bold">Created At</p>
-          <p>{data.createdAt}</p>
-          <p className="font-bold">Deactivated At</p>
-          <p>{data.deletedAt ?? "---"}</p>
+        <div className="border bg-white p-2 flex-1 grid grid-cols-2">
+          <div>
+            <p className="font-bold">Username</p>
+            <p>{data.username}</p>
+          </div>
+          <div>
+            <p className="font-bold">Role</p>
+            <p>{data.role}</p>
+          </div>
+          <div>
+            <p className="font-bold">User ID</p>
+            <p className="font-mono">{data.id}</p>
+          </div>
+          <div>
+            <p className="font-bold">Created At</p>
+            <p>{data.createdAt}</p>
+          </div>
+          <div>
+            <p className="font-bold">Deactivated At</p>
+            <p>{data.deletedAt ?? "---"}</p>
+          </div>
+          <div>
+            <p className="font-bold">Needs Password Reset?</p>
+            <p>{data.needsPasswordReset ? "YES" : "NO"}</p>
+          </div>
         </div>
         <div className="flex flex-col flex-1">
           <div className="border bg-white h-full">

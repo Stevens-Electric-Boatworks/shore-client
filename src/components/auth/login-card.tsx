@@ -14,15 +14,13 @@ import { useAuth } from "../contexts/AuthContext";
 const loginSchema = z.object({
   username: z
     .string()
-    .min(3, "Username must be at least 3 chars")
-    .max(20, "Username too long")
-    .regex(/^[a-z0-9_]+$/, "Only lowercase, numbers, underscores"),
+    .min(1, "Username is required")
+    .max(40, "Username too long"),
 
   password: z
     .string()
-    .min(8, "Password must be at least 8 chars")
-    .regex(/[A-Z]/, "Needs one uppercase letter")
-    .regex(/[0-9]/, "Needs one number"),
+    .min(1, "Password is required")
+    .max(40, "Password is too long"),
 });
 
 type LoginData = z.infer<typeof loginSchema>;

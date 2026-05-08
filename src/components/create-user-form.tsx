@@ -3,11 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { NavButton } from "./ui/nav-button";
 import { useMutation } from "@tanstack/react-query";
 import { apiClient } from "@/lib/auth/apiClient";
 import { LineSpinner } from "ldrs/react";
 import { useRouter } from "next/navigation";
+import getErrorString from "@/lib/get-error-string";
+import StopSvg from "@assets/stop.svg";
+import Image from "next/image";
 
 const schema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -84,6 +86,12 @@ export const CreateUserForm = () => {
           <span className="text-red-700">{errors.role.message}</span>
         )}
       </div>
+      {mutation.isError && (
+        <div className="border p-2 bg-red-200 text-red-800 flex gap-2 items-center">
+          <Image src={StopSvg} alt="" className="w-8" />
+          {getErrorString(mutation.error)}
+        </div>
+      )}
       <button
         className="bg-blue-600 text-white font-bold border-t-blue-400 border-l-blue-400 border-b-blue-700 border-r-blue-700 hover:bg-blue-700 p-2 border-2 cursor-pointer min-w-30 flex items-center justify-center"
         type="submit"
