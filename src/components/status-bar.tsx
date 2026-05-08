@@ -4,33 +4,14 @@ import { useEffect, useState } from "react";
 import { useStore } from "@/store";
 import { useAuth } from "./contexts/AuthContext";
 import { UsernameStatusBar } from "./username-status-bar";
+import { StatusBarConnectionStatus } from "./status-bar-connection";
 
 export const StatusBar = () => {
   const { alarms, ws, latencies, can_bus_state, data } = useStore();
 
-  const [isFailed, setIsFailed] = useState(false);
-  const [isConnecting, setIsConnecting] = useState(true);
-
-  useEffect(() => {
-    if (ws) {
-      setIsConnecting(ws.readyState === WebSocket.OPEN);
-
-      ws.addEventListener("open", () => {
-        setIsFailed(false);
-        setIsConnecting(false);
-      });
-
-      ws.addEventListener("error", () => {
-        setIsFailed(false);
-        setIsConnecting(true);
-      });
-
-      ws.addEventListener("close", () => {
-        setIsFailed(false);
-        setIsConnecting(true);
-      });
-    }
-  }, [ws]);
+  const isConnecting = ws?.readyState === WebSocket.CONNECTING;
+  const isConnected = ws?.readyState === WebSocket.OPEN;
+  const isFailed = !isConnected && !isConnecting;
 
   useEffect(() => {
     const handle = setInterval(() => {});
@@ -48,14 +29,6 @@ export const StatusBar = () => {
   const latestTimeDelta =
     Date.now() - (data.get("boat_time")?.timestamp.getTime() || 0);
 
-  const connectionColor = () => {
-    if (isFailed) return red;
-    if (isConnecting) return yellow;
-    if ((latencies[0]?.value || 0) > 1000) return yellow;
-
-    return green;
-  };
-
   const can_bus_color = () => {
     if (isConnecting || isFailed || latestTimeDelta > 5000) return grey;
     if (can_bus_state == 0) return red;
@@ -72,12 +45,6 @@ export const StatusBar = () => {
     if (can_bus_state == 2) return "CAN BUS TEST";
 
     return "CAN BUS UNAVAIL";
-  };
-
-  const connectionText = () => {
-    if (isConnecting) return "CONNECTING";
-    if (isFailed) return "CONNECTION ERR";
-    return "CONNECTION OK";
   };
 
   const systemStatus = () => {
@@ -123,16 +90,7 @@ export const StatusBar = () => {
           <p>{systemStatus()}</p>
         </div>
 
-        <div
-          className={`px-2 border-x bg-gradient-to-b  border-black ${connectionColor()}`}
-        >
-          <p>
-            {connectionText()}{" "}
-            {!isConnecting && !isFailed && latencies[0]
-              ? `[${latencies[0].value} ms]`
-              : ""}
-          </p>
-        </div>
+        <StatusBarConnectionStatus />
       </div>
 
       <div className="flex justify-end">

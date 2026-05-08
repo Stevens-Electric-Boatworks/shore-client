@@ -41,12 +41,13 @@ export default function RootLayout({
   useEffect(() => {
     if (!loaded) return;
     if (ws) return;
+    if (!isLoading && !isAuthenticated) return;
 
     useStore.setState({ url: socketUrl });
     connect();
 
     return () => disconnect();
-  }, [socketUrl, loaded]);
+  }, [socketUrl, loaded, isLoading, isAuthenticated]);
 
   useEffect(() => {
     if (!isLoading) {
